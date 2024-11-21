@@ -24,6 +24,31 @@ def PauliX(singleQubitGate):
 
     def __init__(self):
         singleQubitGate.__init__(self, np.array([[0, 1], [1, 0]]))
+
+def PauliY(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[0, -1j], [1j, 0]]))
+
+def PauliZ(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[1, 0], [0, 1]]))
+
+def Hadamard(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[1, 1], [1, -1]])/np.sqrt(2))
+
+def S(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[1, 0], [0, 1j]]))
+
+def T(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[1, 0], [0, 1/np.sqrt(2)+1j/np.sqrt(2)]]))
     
 
 
