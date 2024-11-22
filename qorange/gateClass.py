@@ -5,6 +5,9 @@ class GateClass:
         self._matrix = matrix
         self._gate_type = gate_type # 1 for single, 2 for double - for later identification in Circuits
 
+    def get_gate_type(self):
+        return self._gate_type
+
 class singleQubitGate(GateClass):
     def __init__(self, matrix):
         if np.shape(matrix) != (2, 2):
@@ -20,37 +23,44 @@ class twoQubitGate(GateClass):
         
         GateClass.__init__(self, matrix, 2)
 
-def PauliX(singleQubitGate):
-
-    def __init__(self):
-        singleQubitGate.__init__(self, np.array([[0, 1], [1, 0]]))
-
-def PauliY(singleQubitGate):
-
-    def __init__(self):
-        singleQubitGate.__init__(self, np.array([[0, -1j], [1j, 0]]))
-
-def PauliZ(singleQubitGate):
+class Identity(singleQubitGate):
 
     def __init__(self):
         singleQubitGate.__init__(self, np.array([[1, 0], [0, 1]]))
 
-def Hadamard(singleQubitGate):
+class PauliX(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[0, 1], [1, 0]]))
+
+
+
+class PauliY(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[0, -1j], [1j, 0]]))
+
+class PauliZ(singleQubitGate):
+
+    def __init__(self):
+        singleQubitGate.__init__(self, np.array([[1, 0], [0, 1]]))
+
+class Hadamard(singleQubitGate):
 
     def __init__(self):
         singleQubitGate.__init__(self, np.array([[1, 1], [1, -1]])/np.sqrt(2))
 
-def S(singleQubitGate):
+class S(singleQubitGate):
 
     def __init__(self):
         singleQubitGate.__init__(self, np.array([[1, 0], [0, 1j]]))
 
-def T(singleQubitGate):
+class T(singleQubitGate):
 
     def __init__(self):
         singleQubitGate.__init__(self, np.array([[1, 0], [0, 1/np.sqrt(2)+1j/np.sqrt(2)]]))
 
-def CNOT(twoQubitGate):
+class CNOT(twoQubitGate):
 
     def __init__(self):
         twoQubitGate.__init__(self, np.array([
@@ -60,7 +70,7 @@ def CNOT(twoQubitGate):
             [0, 0, 1, 0]   # |11⟩ -> |10⟩
         ]))
 
-def CZ(twoQubitGate):
+class CZ(twoQubitGate):
 
     def __init__(self):
         twoQubitGate.__init__(self, np.array([
@@ -70,7 +80,7 @@ def CZ(twoQubitGate):
             [0, 0, 0, -1]   
         ]))
     
-def SWAP(twoQubitGate):
+class SWAP(twoQubitGate):
 
     def __init__(self):
         twoQubitGate.__init__(self, np.array([

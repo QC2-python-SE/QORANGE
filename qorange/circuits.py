@@ -1,4 +1,5 @@
 import numpy as np
+from gateClass import singleQubitGate, twoQubitGate
 
 class QuantumCircuit:
     """
@@ -18,9 +19,35 @@ class QuantumCircuit:
             num_qubits (int): The number of qubits in the circuit.
         """
         self.num_qubits = num_qubits
-        self.gates = []  # Stores the gates applied to the circuit
+        self._gates = []  # Stores the gates applied to the circuit
         self.state = np.zeros((2 ** num_qubits,), dtype=complex)
         self.state[0] = 1  # Initialize state vector to |0...0>
+
+
+    def load_gates(self, gate_array):
+        
+        # Validate if gate_array is correctly written
+        circuit_depth = len(gate_array)
+        
+        for i in range(circuit_depth):
+            # Checks each depth in the circuit to verify if the gates applied match the qubits
+            gates_iter = gate_array[i]
+            if len(gates_iter) != self.num_qubits:
+                raise Exception(f"Number of gates in circuit depth {i+1} does not match number of qubits {self.num_qubits}")
+
+            for gate in gates_iter:#
+                if isinstance(gate, singleQubitGate):
+                    continue
+                elif isinstance(gate, list):
+                    if isinstance(gate[0], twoQubitGate) and isinstance(gate[1], tuple):
+                        print("Double Gate")
+                    else:
+                        raise Exception(f"Double gate not correctly specified in circuit depth {i+1}")   
+                else:
+                    raise Exception(f"Invalid gate specification in circuit depth {i+1}")
+
+        
+
 
     def apply_gate(self, gate_matrix, target):
         """
@@ -75,9 +102,30 @@ class QuantumCircuit:
 
    
 
-# Example usage
-circuit = QuantumCircuit(1)  # Create a 1-qubit circuit
-circuit.h(0)                 # Apply H gate to qubit 0
+if __name__ == "__main__":
+    from gateClass import *
 
-print(circuit)               # Print the applied gates
-print("Measurement probabilities:", circuit.measure())  # Print measurement probabilities
+    x = PauliX()
+    y = PauliY()
+    z = PauliZ()
+    i = Identity()
+    cnot = CNOT()
+
+    circuit = QuantumCircuit(3)
+
+    gate_array = [
+        [x, i, i],
+        [i, [cnot, (1,2)], [cnot, (1,2)]],
+        [i, y, z],
+        [[cnot, (2,0)], i, [cnot, (2,0)]]
+    ]
+
+    circuit.load_gates(gate_array)
+    """
+    # Example usage
+    circuit = QuantumCircuit(1)  # Create a 1-qubit circuit
+    circuit.h(0)                 # Apply H gate to qubit 0
+
+    print(circuit)               # Print the applied gates
+    print("Measurement probabilities:", circuit.measure())  # Print measurement probabilities
+    """
