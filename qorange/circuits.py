@@ -18,36 +18,18 @@ class QuantumCircuit:
         Args:
             num_qubits (int): The number of qubits in the circuit.
         """
-        self.num_qubits = num_qubits
+
+        self.q1 = np.array([1, 0])
+        self.q2 = np.array([1, 0])
+        self.state = np.kron(self.q1, self.q2)
         self._gates = []  # Stores the gates applied to the circuit
-        self.state = np.zeros((2 ** num_qubits,), dtype=complex)
-        self.state[0] = 1  # Initialize state vector to |0...0>
-
-
-    def load_gates(self, gate_array):
-        
-        # Validate if gate_array is correctly written
-        circuit_depth = len(gate_array)
-        
-        for i in range(circuit_depth):
-            # Checks each depth in the circuit to verify if the gates applied match the qubits
-            gates_iter = gate_array[i]
-            if len(gates_iter) != self.num_qubits:
-                raise Exception(f"Number of gates in circuit depth {i+1} does not match number of qubits {self.num_qubits}")
-
-            for gate in gates_iter:#
-                if isinstance(gate, singleQubitGate):
-                    continue
-                elif isinstance(gate, list):
-                    if isinstance(gate[0], twoQubitGate) and isinstance(gate[1], tuple):
-                        print("Double Gate")
-                    else:
-                        raise Exception(f"Double gate not correctly specified in circuit depth {i+1}")   
-                else:
-                    raise Exception(f"Invalid gate specification in circuit depth {i+1}")
+        # self.state = np.zeros((2 ** num_qubits,), dtype=complex)
+        # self.state[0] = 1
 
         
 
+   
+       
 
     def apply_gate(self, gate_matrix, target):
         """
@@ -57,13 +39,19 @@ class QuantumCircuit:
             gate_matrix (np.ndarray): The matrix representation of the gate.
             target (int): The qubit the gate acts on.
         """
+        # gate_matrix acts on the output of state() 
+
         # Build the full operator for the entire system
-        full_matrix = 1
-        for qubit in range(self.num_qubits):
-            if qubit == target:
-                full_matrix = np.kron(full_matrix, gate_matrix)
-            else:
-                full_matrix = np.kron(full_matrix, np.eye(2))
+    
+        if gate_matrix.controlled:
+
+        else:
+            if self.q1 == target
+                self.q1 = np.dot(gate_matrix, self.q1)
+            if self.q2 == target
+                self.q2 = np.dot(gate_matrix, self.q2)
+            
+
 
         # Update the state vector by applying the full matrix
         self.state = np.dot(full_matrix, self.state)
@@ -121,6 +109,9 @@ if __name__ == "__main__":
     ]
 
     circuit.load_gates(gate_array)
+
+
+    a = new Gate([[]])
     """
     # Example usage
     circuit = QuantumCircuit(1)  # Create a 1-qubit circuit
@@ -129,3 +120,6 @@ if __name__ == "__main__":
     print(circuit)               # Print the applied gates
     print("Measurement probabilities:", circuit.measure())  # Print measurement probabilities
     """
+
+
+c.apply_gate(X, 1)

@@ -1,6 +1,6 @@
 import numpy as np
 
-class GateClass:
+class Gate:
     """
     A base class for quantum gates, ensuring that the matrix representation
     of the gate is unitary.
@@ -20,14 +20,25 @@ class GateClass:
             matrix (numpy.ndarray): The matrix representation of the quantum gate.
 
         Raises:
-            Exception: If the matrix is not unitary.
+            ValueError: If the matrix is not unitary.
         """
+        if not isinstance(matrix, np.ndarray):
+            raise TypeError("Matrix must be a numpy array.")
+        if len(matrix.shape) != 2 or matrix.shape[0] != matrix.shape[1]:
+            raise ValueError("Matrix must be square.")
+        
         self._matrix = matrix
         # Check if the matrix is unitary by verifying that matrix * matrix† = Identity.
-        if not np.allclose(np.eye(np.shape(matrix)[0]), np.dot(matrix, matrix.conj().T)):
-            raise Exception("Matrix is not unitary!")
+        if not np.allclose(np.eye(matrix.shape[0]), np.dot(matrix, matrix.conj().T)):
+            raise ValueError("Matrix is not unitary!")
 
-class Identity(GateClass):
+    def __repr__(self):
+        """
+        Returns a string representation of the Gate object.
+        """
+        return f"Gate({self._matrix})"
+
+class Identity(Gate):
     """
     Represents the Identity quantum gate (I), which leaves the quantum state unchanged.
     """
@@ -35,10 +46,10 @@ class Identity(GateClass):
         """
         Initializes the Identity gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0], 
                                            [0, 1]]))
 
-class PauliX(GateClass):
+class PauliX(Gate):
     """
     Represents the Pauli-X quantum gate, also known as the NOT gate.
     It flips the state of a qubit (|0⟩ ↔ |1⟩).
@@ -47,10 +58,10 @@ class PauliX(GateClass):
         """
         Initializes the Pauli-X gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[0, 1], 
+        Gate.__init__(self, np.array([[0, 1], 
                                            [1, 0]]))
 
-class PauliY(GateClass):
+class PauliY(Gate):
     """
     Represents the Pauli-Y quantum gate. 
     It applies a 180° rotation around the Y-axis on the Bloch sphere.
@@ -59,10 +70,10 @@ class PauliY(GateClass):
         """
         Initializes the Pauli-Y gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[0, -1j], 
+        Gate.__init__(self, np.array([[0, -1j], 
                                            [1j, 0]]))
 
-class PauliZ(GateClass):
+class PauliZ(Gate):
     """
     Represents the Pauli-Z quantum gate.
     It applies a 180° rotation around the Z-axis on the Bloch sphere.
@@ -71,10 +82,10 @@ class PauliZ(GateClass):
         """
         Initializes the Pauli-Z gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0], 
                                            [0, -1]]))  # Corrected the second element
 
-class Hadamard(GateClass):
+class Hadamard(Gate):
     """
     Represents the Hadamard quantum gate (H).
     It creates superpositions by transforming |0⟩ to (|0⟩ + |1⟩)/√2 
@@ -84,10 +95,10 @@ class Hadamard(GateClass):
         """
         Initializes the Hadamard gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[1, 1], 
+        Gate.__init__(self, np.array([[1, 1], 
                                            [1, -1]])/np.sqrt(2))
 
-class S(GateClass):
+class S(Gate):
     """
     Represents the S gate (phase gate).
     It applies a 90° phase shift to the |1⟩ state.
@@ -96,10 +107,10 @@ class S(GateClass):
         """
         Initializes the S gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0], 
                                            [0, 1j]]))
 
-class T(GateClass):
+class T(Gate):
     """
     Represents the T gate (π/8 gate).
     It applies a π/4 phase shift to the |1⟩ state.
@@ -108,10 +119,10 @@ class T(GateClass):
         """
         Initializes the T gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([[1, 0],
+        Gate.__init__(self, np.array([[1, 0],
                                            [0, 1/np.sqrt(2) + 1j/np.sqrt(2)]]))
 
-class CNOT(GateClass):
+class CNOT(Gate):
     """
     Represents the Controlled-NOT (CNOT) gate.
     It flips the target qubit if the control qubit is |1⟩.
@@ -120,14 +131,14 @@ class CNOT(GateClass):
         """
         Initializes the CNOT gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([
+        Gate.__init__(self, np.array([
             [1, 0, 0, 0],  # |00⟩ → |00⟩
             [0, 1, 0, 0],  # |01⟩ → |01⟩
             [0, 0, 0, 1],  # |10⟩ → |11⟩
             [0, 0, 1, 0]   # |11⟩ → |10⟩
         ]))
 
-class CZ(GateClass):
+class CZ(Gate):
     """
     Represents the Controlled-Z (CZ) gate.
     It applies a Z gate to the target qubit if the control qubit is |1⟩.
@@ -136,14 +147,14 @@ class CZ(GateClass):
         """
         Initializes the CZ gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([
+        Gate.__init__(self, np.array([
             [1, 0, 0, 0],  # |00⟩ → |00⟩
             [0, 1, 0, 0],  # |01⟩ → |01⟩
             [0, 0, 1, 0],  # |10⟩ → |10⟩
             [0, 0, 0, -1]  # |11⟩ → -|11⟩
         ]))
 
-class SWAP(GateClass):
+class SWAP(Gate):
     """
     Represents the SWAP gate.
     It swaps the states of two qubits.
@@ -152,9 +163,11 @@ class SWAP(GateClass):
         """
         Initializes the SWAP gate with its matrix representation.
         """
-        GateClass.__init__(self, np.array([
+        Gate.__init__(self, np.array([
             [1, 0, 0, 0],  # |00⟩ → |00⟩
             [0, 0, 1, 0],  # |01⟩ → |10⟩
             [0, 1, 0, 0],  # |10⟩ → |01⟩
             [0, 0, 0, 1]   # |11⟩ → |11⟩
         ]))
+
+        
