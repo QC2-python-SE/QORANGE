@@ -27,7 +27,7 @@ class Gate:
         if len(matrix.shape) != 2 or matrix.shape[0] != matrix.shape[1]:
             raise ValueError("Matrix must be square.")
         
-        self._matrix = matrix
+        self.matrix = matrix
         # Check if the matrix is unitary by verifying that matrix * matrix† = Identity.
         if not np.allclose(np.eye(matrix.shape[0]), np.dot(matrix, matrix.conj().T)):
             raise ValueError("Matrix is not unitary!")
