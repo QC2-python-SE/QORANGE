@@ -11,7 +11,7 @@ class Gate:
     Methods:
         __init__(matrix): Initializes the gate with the given unitary matrix.
     """
-    def __init__(self, matrix):
+    def __init__(self, matrix, iscontrolled = False):
         """
         Initializes the quantum gate with the given matrix.
         Checks whether the matrix is unitary.
@@ -121,6 +121,11 @@ class T(Gate):
         """
         Gate.__init__(self, np.array([[1, 0],
                                            [0, 1/np.sqrt(2) + 1j/np.sqrt(2)]]))
+        
+
+
+
+
 
 class CNOT(Gate):
     """
@@ -136,7 +141,7 @@ class CNOT(Gate):
             [0, 1, 0, 0],  # |01⟩ → |01⟩
             [0, 0, 0, 1],  # |10⟩ → |11⟩
             [0, 0, 1, 0]   # |11⟩ → |10⟩
-        ]))
+        ]), True)
 
 class CZ(Gate):
     """
@@ -154,6 +159,8 @@ class CZ(Gate):
             [0, 0, 0, -1]  # |11⟩ → -|11⟩
         ]))
 
+
+
 class SWAP(Gate):
     """
     Represents the SWAP gate.
@@ -169,5 +176,3 @@ class SWAP(Gate):
             [0, 1, 0, 0],  # |10⟩ → |01⟩
             [0, 0, 0, 1]   # |11⟩ → |11⟩
         ]))
-
-        
