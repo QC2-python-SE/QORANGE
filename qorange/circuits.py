@@ -47,9 +47,9 @@ class QuantumCircuit:
             else:
                 raise Exception("Invalid indexing of qubits")
             
-        print(self.q1)
-        print(self.q2)
-            
+        elif isinstance(q_index, tuple):
+            pass
+            # controlled unitary operations here.
 
         
     def x(self, target):
