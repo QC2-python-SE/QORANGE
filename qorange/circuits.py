@@ -31,7 +31,7 @@ class QuantumCircuit:
    
        
 
-    def apply_gate(self, q_index, gate):
+    def apply_gate(self, gate, q_index):
         """
         Applies a gate matrix to the circuit's state vector.
 
@@ -41,6 +41,7 @@ class QuantumCircuit:
         """
         if isinstance(gate, Gate):
             if isinstance(gate, TwoQubitGate):
+                # q_index is not necessary here.
                 gate_matrix = gate.matrix
             else:
                 if q_index == 1:

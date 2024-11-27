@@ -140,7 +140,7 @@ class CNOT(ControlledGate):
     Represents the Controlled-NOT (CNOT) gate.
     It flips the target qubit if the control qubit is |1⟩.
     """
-    def __init__(self, gate):
+    def __init__(self):
         super().__init__(PauliX())
 
 class CZ(ControlledGate):
@@ -148,7 +148,7 @@ class CZ(ControlledGate):
     Represents the Controlled-Z (CZ) gate.
     It applies a Z gate to the target qubit if the control qubit is |1⟩.
     """
-    def __init__(self, gate):
+    def __init__(self):
         super().__init__(PauliZ())
 
 
