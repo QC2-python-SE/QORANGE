@@ -1,4 +1,5 @@
 import numpy as np
+from gateClass import Gate, ControlledGate, SWAP
 
 class QuantumCircuit:
     """
@@ -38,32 +39,34 @@ class QuantumCircuit:
             q_index: int if single qubit operation (1 for q1 and 2 for q2)
             gate: gate being applied
         """
-        if isinstance(q_index, int):
+        if isinstance(gate, Gate):
+            if isinstance(gate, TwoQubitGate):
+                gate_matrix = gate.matrix
+            else:
+                if q_index == 1:
+                    gate_matrix = np.kron(gate.matrix, np.eye(2))
+                elif q_index == 2:
+                    gate_matrix = np.kron(np.eye(2),gate.matrix)
+                else:
+                    raise Exception("Invalid indexing of qubits")
+            self.state = np.matmul(gate_matrix, self.state)
+        elif isinstance(gate, ControlledGate):
             if q_index == 1:
-                self.state = np.matmul(np.kron(gate.matrix, np.eye(2)), self.state)
+                # control is on the first qubit
+                gate_matrix = np.kron([[1,0],[0,0]], gate.get_matrix()) + np.kron([[0,0],[0,1]], gate.get_matrix())
             elif q_index == 2:
-                self.state = np.matmul(np.kron( np.eye(2),gate.matrix), self.state)
+                # control is on the second qubit
+                gate_matrix = np.kron(gate.get_matrix(), [[1,0],[0,0]]) + np.kron(gate.get_matrix(), [[0,0],[0,1]])
             else:
                 raise Exception("Invalid indexing of qubits")
-        elif isinstance(q_index, tuple):
-            pass
-            # controlled unitary operations here.
-
-    def print_q1(self):
-        # computes the coefficients of the |0> and |1> states on the first qubit
-        q1_0 = np.matmul(np.kron(np.array([1,0]).transpose(), np.eye(2,2)), self.state)
-        q1_1 = np.matmul(np.kron(np.array([0,1]).transpose(), np.eye(2,2)), self.state)
-        q1 = np.array([np.dot(q1_0, q1_0), np.dot(q1_1, q1_1)])
-        print(q1)
-        return q1
-
-    def print_q2(self):
-        # computes the coefficients of the |0> and |1> states on the second qubit
-        q2_0 = np.matmul(np.kron(np.eye(2,2), np.array([1,0]).transpose()), self.state)
-        q2_1 = np.matmul(np.kron(np.eye(2,2), np.array([0,1]).transpose()), self.state)
-        q2 = np.array([np.dot(q2_0, q2_0), np.dot(q2_1, q2_1)])
-        print(q2)
-        return q2
+            
+            self.state = np.matmul(gate_matrix, self.state)
+        else:
+            raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
+        
+        
+        
+    
         
     def x(self, target):
         """
@@ -109,10 +112,5 @@ if __name__ == "__main__":
     cnot = CNOT()
 
     circuit = QuantumCircuit()
-    circuit.print_q1()
-    circuit.print_q2()
     circuit.apply_gate(1, x)
-    circuit.print_q1()
-    circuit.print_q2()
-
     

@@ -11,7 +11,7 @@ class Gate:
     Methods:
         __init__(matrix): Initializes the gate with the given unitary matrix.
     """
-    def __init__(self, matrix, iscontrolled = False):
+    def __init__(self, matrix, span = 2):
         """
         Initializes the quantum gate with the given matrix.
         Checks whether the matrix is unitary.
@@ -24,7 +24,7 @@ class Gate:
         """
         if not isinstance(matrix, np.ndarray):
             raise TypeError("Matrix must be a numpy array.")
-        if len(matrix.shape) != 2 or matrix.shape[0] != matrix.shape[1]:
+        if len(matrix.shape) != span or matrix.shape[0] != matrix.shape[1]:
             raise ValueError("Matrix must be square.")
         
         self.matrix = matrix
@@ -125,43 +125,38 @@ class T(Gate):
 
 
 
+class ControlledGate():
+    def __init__(self, gate):
+        if isinstance(gate, Gate):
+            self.gate = gate
+        else:
+            raise Exception("Specified gate object is invalid, use Gate class")
+        
+    def get_matrix(self):
+        return self.gate.matrix
 
-
-class CNOT(Gate):
+class CNOT(ControlledGate):
     """
     Represents the Controlled-NOT (CNOT) gate.
     It flips the target qubit if the control qubit is |1⟩.
     """
-    def __init__(self):
-        """
-        Initializes the CNOT gate with its matrix representation.
-        """
-        Gate.__init__(self, np.array([
-            [1, 0, 0, 0],  # |00⟩ → |00⟩
-            [0, 1, 0, 0],  # |01⟩ → |01⟩
-            [0, 0, 0, 1],  # |10⟩ → |11⟩
-            [0, 0, 1, 0]   # |11⟩ → |10⟩
-        ]), True)
+    def __init__(self, gate):
+        super().__init__(PauliX())
 
-class CZ(Gate):
+class CZ(ControlledGate):
     """
     Represents the Controlled-Z (CZ) gate.
     It applies a Z gate to the target qubit if the control qubit is |1⟩.
     """
-    def __init__(self):
-        """
-        Initializes the CZ gate with its matrix representation.
-        """
-        Gate.__init__(self, np.array([
-            [1, 0, 0, 0],  # |00⟩ → |00⟩
-            [0, 1, 0, 0],  # |01⟩ → |01⟩
-            [0, 0, 1, 0],  # |10⟩ → |10⟩
-            [0, 0, 0, -1]  # |11⟩ → -|11⟩
-        ]))
+    def __init__(self, gate):
+        super().__init__(PauliZ())
 
 
+class TwoQubitGate(Gate):
+    def __init__(self, matrix):
+        super().__init__(matrix, span=4)
 
-class SWAP(Gate):
+class SWAP(TwoQubitGate):
     """
     Represents the SWAP gate.
     It swaps the states of two qubits.
