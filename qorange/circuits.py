@@ -31,7 +31,7 @@ class QuantumCircuit:
    
        
 
-    def apply_gate(self, gate, q_index):
+    def apply_gate(self, q_index, gate):
         """
         Applies a gate matrix to the circuit's state vector.
 
@@ -113,5 +113,7 @@ if __name__ == "__main__":
     cnot = CNOT()
 
     circuit = QuantumCircuit()
-    circuit.apply_gate(1, x)
     
+    print(circuit.state)
+    circuit.apply_gate(1, x)
+    print(circuit.state)
