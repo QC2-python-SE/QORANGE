@@ -1,5 +1,5 @@
 import numpy as np
-from gateClass import Gate, ControlledGate, SWAP
+from qorange.gates import Gate, TwoQubitGate, ControlledGate
 
 class QuantumCircuit:
     """
@@ -18,18 +18,8 @@ class QuantumCircuit:
         Args:
             num_qubits (int): The number of qubits in the circuit.
         """
-
-        #self.q1 = np.array([1, 0])
-        #self.q2 = np.array([1, 0])
         self.state = np.kron(np.array([1, 0]), np.array([1, 0]))
         self._gates = []  # Stores the gates applied to the circuit
-        # self.state = np.zeros((2 ** num_qubits,), dtype=complex)
-        # self.state[0] = 1
-
-        
-
-   
-       
 
     def apply_gate(self, q_index, gate):
         """
@@ -64,11 +54,7 @@ class QuantumCircuit:
             self.state = np.matmul(gate_matrix, self.state)
         else:
             raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
-        
-        
-        
-    
-        
+
     def x(self, target):
         """
         Applies an X (NOT) gate to a qubit.
@@ -100,20 +86,3 @@ class QuantumCircuit:
         """
         probabilities = np.abs(self.state) ** 2
         return probabilities.tolist()
-
-   
-
-if __name__ == "__main__":
-    from gateClass import *
-
-    x = PauliX()
-    y = PauliY()
-    z = PauliZ()
-    i = Identity()
-    cnot = CNOT()
-
-    circuit = QuantumCircuit()
-    
-    print(circuit.state)
-    circuit.apply_gate(1, x)
-    print(circuit.state)
