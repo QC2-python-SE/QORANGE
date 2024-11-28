@@ -1,5 +1,7 @@
 if __name__ == "__main__":
-    from qorange.circuits import QuantumCircuit
+    import sys, os
+    sys.path.append(os.path.abspath(os.path.join('..', 'qorange')))
+    from qorange.circuits import QuantumCircuit 
     from qorange.gates import *
 
     x = PauliX()
