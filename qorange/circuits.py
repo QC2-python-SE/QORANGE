@@ -44,10 +44,10 @@ class QuantumCircuit:
         elif isinstance(gate, ControlledGate):
             if q_index == 1:
                 # control is on the first qubit
-                gate_matrix = np.kron([[1,0],[0,0]], gate.get_matrix()) + np.kron([[0,0],[0,1]], gate.get_matrix())
+                gate_matrix = np.kron(np.array([[1,0],[0,0]]), np.eye(2)) + np.kron(np.array([[0,0],[0,1]]), gate.get_matrix())
             elif q_index == 2:
                 # control is on the second qubit
-                gate_matrix = np.kron(gate.get_matrix(), [[1,0],[0,0]]) + np.kron(gate.get_matrix(), [[0,0],[0,1]])
+                gate_matrix = np.kron(np.eye(2), np.array([[1,0],[0,0]])) + np.kron(gate.get_matrix(), np.array([[0,0],[0,1]]))
             else:
                 raise Exception("Invalid indexing of qubits")
             

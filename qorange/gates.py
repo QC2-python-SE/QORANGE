@@ -24,7 +24,7 @@ class Gate:
         """
         if not isinstance(matrix, np.ndarray):
             raise TypeError("Matrix must be a numpy array.")
-        if len(matrix.shape) != span or matrix.shape[0] != matrix.shape[1]:
+        if np.shape(matrix) != (span, span):
             raise ValueError("Matrix must be square.")
         
         self.matrix = matrix
@@ -162,7 +162,7 @@ class SWAP(TwoQubitGate):
         """
         Initializes the SWAP gate with its matrix representation.
         """
-        Gate.__init__(self, np.array([
+        TwoQubitGate.__init__(self, np.array([
             [1, 0, 0, 0],  # |00⟩ → |00⟩
             [0, 0, 1, 0],  # |01⟩ → |10⟩
             [0, 1, 0, 0],  # |10⟩ → |01⟩
