@@ -66,6 +66,25 @@ class QuantumCircuit:
             self.update_state(np.matmul(gate_matrix, self.state))
         else:
             raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
+        
+
+    def partial_trace(self, qubits_to_keep):
+        
+        
+        reshaped_state = self.density_matrix.reshape(2, 2, 2, 2)
+        if qubits_to_keep == 1:
+            # perform trace over quabit 2
+            reduccude_matrix_q1 = np.einsum('ijkl->jk', reshaped_state)
+        elif qubits_to_keep == 2:
+            # perform trace over qubit 1
+            reduced_matrix_q2 = np.einsum('ijkl->il', reshaped_state)
+        else:
+            raise Exception("Invalid qubit index")
+            
+
+        
+        
+
 
     def measure(self):
         """
