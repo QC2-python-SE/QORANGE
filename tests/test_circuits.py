@@ -90,3 +90,33 @@ def test_circuit_4():
         circuit.state,
         expected_state
     )
+
+def test_circuit_5():
+    '''
+    Test the circuit with Hadamard, Pauli-Z, and Hadamard gates on the first qubit.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, Hadamard())  # Apply Hadamard to the first qubit
+    circuit.apply_gate(1, PauliZ())   # Apply Z gate to the first qubit
+    circuit.apply_gate(1, Hadamard())  # Apply Hadamard again to the first qubit
+
+    # Expected state: |10> -> [0, 1, 0, 0]
+    expected_state = np.array([0, 0, 1, 0])
+
+    npt.assert_allclose(
+        circuit.state,
+        expected_state
+    )
+
+def test_circuit_6():
+    '''
+    Test the Bell circuit for creating entanglement.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, Hadamard())
+    circuit.apply_gate(1, CZ())
+    
+    npt.assert_allclose(
+        circuit.state, 
+        np.array([1, 0, 1, 0])/np.sqrt(2)
+    )
