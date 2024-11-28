@@ -54,3 +54,23 @@ def test_circuit_2():
         rtol=1e-5,
         atol=1e-8
     )
+
+def test_circuit_3():
+    '''
+    Test the circuit with X, Hadamard, and CNOT gates.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, PauliX())  # Apply X gate to the first qubit
+    circuit.apply_gate(1, Hadamard())  # Apply Hadamard to the first qubit
+    circuit.apply_gate(1, CNOT())  # Apply CNOT with qubit 1 as control, qubit 2 as target
+
+    # Expected state: (|00> - |11>)/sqrt(2) -> [1/sqrt(2), 0, 0, -1/sqrt(2)]
+    expected_state = np.array([1/np.sqrt(2), 0, 0, -1/np.sqrt(2)])
+
+    # Verify the output state matches the expected state
+    npt.assert_allclose(
+        circuit.state,
+        expected_state,
+        rtol=1e-5,
+        atol=1e-8
+    )
