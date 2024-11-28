@@ -34,3 +34,23 @@ def test_circuit_1():
         rtol=1e-5,
         atol=1e-8
     )
+
+def test_circuit_2():
+    '''
+    Test the circuit with Hadamard, X, and Hadamard gates on the first qubit.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, Hadamard())  # Apply Hadamard to the first qubit
+    circuit.apply_gate(1, PauliX())   # Apply X gate to the first qubit
+    circuit.apply_gate(1, Hadamard())  # Apply Hadamard again to the first qubit
+
+    # Expected state: |00> -> [1, 0, 0, 0]
+    expected_state = np.array([1, 0, 0, 0])
+
+    # Verify the output state matches the expected state
+    npt.assert_allclose(
+        circuit.state,
+        expected_state,
+        rtol=1e-5,
+        atol=1e-8
+    )
