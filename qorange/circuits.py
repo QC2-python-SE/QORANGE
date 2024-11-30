@@ -102,18 +102,38 @@ class QuantumCircuit:
         else: 
             raise Exception("Invalid value for keep parameter. Use 1 to keep qubit 1, and 2 to keep qubit 2")
 
-        
-        
-        
-        
-
-
-    def measure(self):
+    def measure_qubit_computational(self, qubit_to_measure):
         """
-        Measures the state of the circuit.
-
-        Returns:
-            list: A list representing the probabilities of each basis state.
+        Measure a qubit in the computational basis.
+        
+        Parameters:
+            qubit_to_measure (int): Index of the qubit to measure.
+        
+        Returns
         """
-        probabilities = np.abs(self.state) ** 2
-        return probabilities.tolist()
+
+        if qubit_to_measure == 1:
+            rho_1 = self.partial_trace(keep=1)
+            p0 = np.trace(rho_1 @ np.array([1, 0], 
+                                          [0, 1])) # Probability of measuring 0 p_0 = Tr(|0><0| * rho)
+            p1 = np.trace(rho_1 @ np.array([0, 0],
+                                           [0, 1])) # Probability of measuring 1 p_1 = Tr(|1><1| * rho)
+            outcome= np.array([p0, p1])
+            return outcome
+        
+        elif qubit_to_measure == 2:
+            rho_2 = self.partial_trace(keep=2)
+            p0 = np.trace(rho_2 @ np.array([1, 0], 
+                                          [0, 1]))
+            p1 = np.trace(rho_2 @ np.array([0, 0],
+                                           [0, 1]))
+            outcome= np.array([p0, p1])
+            return outcome
+        
+        else:
+            raise Exception("Invalid value for qubit_to_measure parameter. Use 1 for qubit 1 and 2 for qubit 2")
+        
+
+
+          
+    
