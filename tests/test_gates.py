@@ -564,24 +564,201 @@ def test_t_q2_state_11():
 # CONTROLLED GATES
 ###########################
 
-def test_apply_gate_cnot():
+def test_cnot_c1_t2_state_00():
     '''
-    TODO
+    Test the CNOT gate with control qubit 1, target qubit 2 on state |00>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, CNOT())
 
-def test_apply_gate_cz():
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_cnot_c1_t2_state_01():
     '''
-    TODO
+    Test the CNOT gate with control qubit 1, target qubit 2 on state |01>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_cnot_c1_t2_state_10():
+    '''
+    Test the CNOT gate with control qubit 1, target qubit 2 on state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_cnot_c1_t2_state_11():
+    '''
+    Test the CNOT gate with control qubit 1, target qubit 2 on state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_cnot_c2_t1_state_00():
+    '''
+    Test the CNOT gate with control qubit 2, target qubit 1 on state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_cnot_c2_t1_state_01():
+    '''
+    Test the CNOT gate with control qubit 2, target qubit 1 on state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_cnot_c2_t1_state_10():
+    '''
+    Test the CNOT gate with control qubit 2, target qubit 1 on state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_cnot_c2_t1_state_11():
+    '''
+    Test the CNOT gate with control qubit 2, target qubit 1 on state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, CNOT())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_cz_c1_t2_state_00():
+    '''
+    Test the CZ gate with control qubit 1, target qubit 2 on state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_cz_c1_t2_state_01():
+    '''
+    Test the CZ gate with control qubit 1, target qubit 2 on state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_cz_c1_t2_state_10():
+    '''
+    Test the CZ gate with control qubit 1, target qubit 2 on state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_cz_c1_t2_state_11():
+    '''
+    Test the CZ gate with control qubit 1, target qubit 2 on state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, CZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_11)
+
+def test_cz_c2_t1_state_00():
+    '''
+    Test the CZ gate with control qubit 2, target qubit 1 on state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_cz_c2_t1_state_01():
+    '''
+    Test the CZ gate with control qubit 2, target qubit 1 on state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_cz_c2_t1_state_10():
+    '''
+    Test the CZ gate with control qubit 2, target qubit 1 on state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, CZ())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_cz_c2_t1_state_11():
+    '''
+    Test the CZ gate with control qubit 2, target qubit 1 on state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, CZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_11)    
 
 ###########################
 # 2-QUBIT GATES
 ###########################
 
-def test_apply_gate_swap():
+def test_swap_state_00():
     '''
-    TODO
+    Test the SWAP gate on state |00>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, SWAP())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_swap_state_01():
+    '''
+    Test the SWAP gate on state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, SWAP())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_swap_state_10():
+    '''
+    Test the SWAP gate on state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, SWAP())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_swap_state_11():
+    '''
+    Test the SWAP gate on state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, SWAP())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
