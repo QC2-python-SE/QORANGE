@@ -3,142 +3,562 @@ import numpy.testing as npt
 from qorange.circuits import QuantumCircuit
 from qorange.gates import *
 
+STATE_00 = np.array([1, 0, 0, 0])
+STATE_01 = np.array([0, 1, 0, 0])
+STATE_10 = np.array([0, 0, 1, 0])
+STATE_11 = np.array([0, 0, 0, 1])
+
 ###########################
 # 1-QUBIT GATES
 ###########################
 
-def test_apply_gate_identity_q1():
+def test_identity_q1_state_00():
     '''
-    Test the identity operator acting on qubit 1.
+    Test the identity operator acting on qubit 1 of state |00>.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(1, Identity())
 
-    npt.assert_array_equal(
-        circuit.state, 
-        np.kron(
-            np.array([1, 0]), 
-            np.array([1, 0]),
-        )
-    )
+    npt.assert_array_equal(circuit.state, STATE_00)
 
-def test_apply_gate_identity_q2():
+def test_identity_q1_state_01():
     '''
-    Test the identity operator acting on qubit 2.
+    Test the identity operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_identity_q1_state_10():
+    '''
+    Test the identity operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_identity_q1_state_11():
+    '''
+    Test the identity operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_identity_q2_state_00():
+    '''
+    Test the identity operator acting on qubit 2 of state |00>.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(2, Identity())
 
-    npt.assert_array_equal(
-        circuit.state, 
-        np.kron(
-            np.array([1, 0]), 
-            np.array([1, 0]),
-        )
-    )
+    npt.assert_array_equal(circuit.state, STATE_00)
 
-def test_apply_gate_pauli_x_q1():
+def test_identity_q2_state_01():
     '''
-    Test the Pauli X operator acting on qubit 1.
+    Test the identity operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_identity_q2_state_10():
+    '''
+    Test the identity operator acting on qubit 2 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_identity_q2_state_11():
+    '''
+    Test the identity operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, Identity())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_pauli_x_q1_state_00():
+    '''
+    Test the Pauli X operator acting on qubit 1 of state |00>.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(1, PauliX())
 
-    npt.assert_array_equal(
-        circuit.state, 
-        np.kron(
-            np.array([0, 1]), 
-            np.array([1, 0]),
-        )
-    )
+    npt.assert_array_equal(circuit.state, STATE_10)
 
-def test_apply_gate_pauli_x_q2():
+def test_pauli_x_q1_state_01():
     '''
-    Test the Pauli X operator acting on qubit 2.
+    Test the Pauli X operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, PauliX())
+
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_pauli_x_q1_state_10():
+    '''
+    Test the Pauli X operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, PauliX())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_pauli_x_q1_state_11():
+    '''
+    Test the Pauli X operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, PauliX())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_pauli_x_q2_state_00():
+    '''
+    Test the Pauli X operator acting on qubit 2 of state |00>.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(2, PauliX())
 
-    npt.assert_array_equal(
-        circuit.state, 
-        np.kron(
-            np.array([1, 0]),
-            np.array([0, 1]), 
-        )
-    )
+    expected = np.array([0, 1, 0, 0]) # |01>
 
-def test_apply_gate_pauli_y_q1():
-    '''
-    Test the Pauli Y operator acting on qubit 1.
-    '''
-    pass
+    npt.assert_array_equal(circuit.state, expected)
 
-def test_apply_gate_pauli_y_q2():
+def test_pauli_x_q2_state_01():
     '''
-    Test the Pauli Y operator acting on qubit 2.
+    Test the Pauli X operator acting on qubit 2 of state |01>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, PauliX())
 
-def test_apply_gate_pauli_z_q1():
-    '''
-    Test the Pauli Z operator acting on qubit 1.
-    '''
-    pass
+    npt.assert_array_equal(circuit.state, STATE_00)
 
-def test_apply_gate_pauli_z_q2():
+def test_pauli_x_q2_state_10():
     '''
-    Test the Pauli Z operator acting on qubit 2.
+    Test the Pauli X operator acting on qubit 2 of state |10>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, PauliX())
 
-def test_apply_gate_hadamard_q1():
+    npt.assert_array_equal(circuit.state, STATE_11)
+
+def test_pauli_x_q2_state_11():
     '''
-    Test the Hadamard operator acting on qubit 1.
+    Test the Pauli X operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, PauliX())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_pauli_y_q1_state_00():
+    '''
+    Test the Pauli Y operator acting on qubit 1 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, PauliY())
+
+    npt.assert_array_equal(circuit.state, 1j * STATE_10)
+
+def test_pauli_y_q1_state_01():
+    '''
+    Test the Pauli Y operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, PauliY())
+
+    npt.assert_array_equal(circuit.state, 1j * STATE_11)
+
+def test_pauli_y_q1_state_10():
+    '''
+    Test the Pauli Y operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, PauliY())
+
+    npt.assert_array_equal(circuit.state, -1j * STATE_00)
+
+def test_pauli_y_q1_state_11():
+    '''
+    Test the Pauli Y operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, PauliY())
+
+    npt.assert_array_equal(circuit.state, -1j * STATE_01)
+
+def test_pauli_y_q2_state_00():
+    '''
+    Test the Pauli Y operator acting on qubit 2 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, PauliY())
+
+    npt.assert_array_equal(circuit.state, 1j * STATE_01)
+
+def test_pauli_y_q2_state_01():
+    '''
+    Test the Pauli Y operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, PauliY())
+
+    npt.assert_array_equal(circuit.state, -1j * STATE_00)
+
+def test_pauli_y_q2_state_10():
+    '''
+    Test the Pauli Y operator acting on qubit 2 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, PauliY())
+
+    npt.assert_array_equal(circuit.state, 1j * STATE_11)
+
+def test_pauli_y_q2_state_11():
+    '''
+    Test the Pauli Y operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, PauliY())
+
+    npt.assert_array_equal(circuit.state, -1j * STATE_10)
+
+def test_pauli_z_q1_state_00():
+    '''
+    Test the Pauli Z operator acting on qubit 1 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, PauliZ())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_pauli_z_q1_state_01():
+    '''
+    Test the Pauli Z operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, PauliZ())
+
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_pauli_z_q1_state_10():
+    '''
+    Test the Pauli Z operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, PauliZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_10)
+
+def test_pauli_z_q1_state_11():
+    '''
+    Test the Pauli Z operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, PauliZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_11)
+
+def test_pauli_z_q2_state_00():
+    '''
+    Test the Pauli Z operator acting on qubit 2 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, PauliZ())
+
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_pauli_z_q2_state_01():
+    '''
+    Test the Pauli Z operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, PauliZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_01)
+
+def test_pauli_z_q2_state_10():
+    '''
+    Test the Pauli Z operator acting on qubit 2 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, PauliZ())
+
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_pauli_z_q2_state_11():
+    '''
+    Test the Pauli Z operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, PauliZ())
+
+    npt.assert_array_equal(circuit.state, -STATE_11)
+
+def test_hadamard_q1_state_00():
+    '''
+    Test the Hadamard operator acting on qubit 1 of state |00>.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(1, Hadamard())
-
-    # Applying Hadamard to the first qubit of |00> results in (1/sqrt(2)) * (|00> + |10>)
-    expected_state = np.array([1/np.sqrt(2), 0, 1/np.sqrt(2), 0])  # |00> + |10> / sqrt(2)
     
-    npt.assert_allclose(circuit.state, expected_state)
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_00 + STATE_10))
 
-def test_apply_gate_hadamard_q2():
+def test_hadamard_q1_state_01():
     '''
-    Test the Hadamard operator acting on qubit 2.
-    '''
-    circuit = QuantumCircuit()
-    circuit.apply_gate(2, Hadamard())
-
-    # Applying Hadamard to the second qubit of |00> results in (1/sqrt(2)) * (|00> + |01>)
-    expected_state = np.array([1/np.sqrt(2), 1/np.sqrt(2), 0, 0])  # |00> + |01> / sqrt(2)
-
-    npt.assert_allclose(circuit.state, expected_state)
-
-def test_apply_gate_hadamard_q1_q2():
-    '''
-    Test the Hadamard operator acting on qubits 1 and 2.
+    Test the Hadamard operator acting on qubit 1 of state |01>.
     '''
     circuit = QuantumCircuit()
+    circuit.state = STATE_01
     circuit.apply_gate(1, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_01 + STATE_11))
+
+def test_hadamard_q1_state_10():
+    '''
+    Test the Hadamard operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_00 - STATE_10))
+
+def test_hadamard_q1_state_11():
+    '''
+    Test the Hadamard operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_01 - STATE_11))
+
+def test_hadamard_q2_state_00():
+    '''
+    Test the Hadamard operator acting on qubit 2 of state |00>.
+    '''
+    circuit = QuantumCircuit()
     circuit.apply_gate(2, Hadamard())
 
-    # Applying Hadamard to both qubits of |00> results in (1/2) * (|00> + |01> + |10> + |11>)
-    expected_state = np.array([1/2, 1/2, 1/2, 1/2])  # (|00> + |01> + |10> + |11>) / 2
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_00 + STATE_01))
 
-    npt.assert_allclose(circuit.state, expected_state)
+def test_hadamard_q2_state_01():
+    '''
+    Test the Hadamard operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_00 - STATE_01))
 
-def test_apply_gate_s():
+def test_hadamard_q2_state_10():
     '''
-    TODO
+    Test the Hadamard operator acting on qubit 2 of state |10>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_10 + STATE_11))
 
-def test_apply_gate_t():
+def test_hadamard_q2_state_11():
     '''
-    TODO
+    Test the Hadamard operator acting on qubit 2 of state |11>.
     '''
-    pass
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, Hadamard())
+    
+    npt.assert_allclose(circuit.state, 1 / np.sqrt(2) * (STATE_10 - STATE_11))
+
+def test_s_q1_state_00():
+    '''
+    Test the S operator acting on qubit 1 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, S())
+    
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_s_q1_state_01():
+    '''
+    Test the S operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, S())
+    
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_s_q1_state_10():
+    '''
+    Test the S operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, S())
+    
+    npt.assert_array_equal(circuit.state, 1j * STATE_10)
+
+def test_s_q1_state_11():
+    '''
+    Test the S operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, S())
+    
+    npt.assert_array_equal(circuit.state, 1j * STATE_11)
+
+def test_s_q2_state_00():
+    '''
+    Test the S operator acting on qubit 2 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, S())
+    
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_s_q2_state_01():
+    '''
+    Test the S operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, S())
+    
+    npt.assert_array_equal(circuit.state, 1j * STATE_01)
+
+def test_s_q2_state_10():
+    '''
+    Test the S operator acting on qubit 2 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, S())
+    
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_s_q2_state_11():
+    '''
+    Test the S operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, S())
+    
+    npt.assert_array_equal(circuit.state, 1j * STATE_11)
+
+def test_t_q1_state_00():
+    '''
+    Test the T operator acting on qubit 1 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, T())
+    
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_t_q1_state_01():
+    '''
+    Test the T operator acting on qubit 1 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(1, T())
+    
+    npt.assert_array_equal(circuit.state, STATE_01)
+
+def test_t_q1_state_10():
+    '''
+    Test the T operator acting on qubit 1 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(1, T())
+    
+    npt.assert_allclose(circuit.state, np.exp(1j * np.pi / 4) * STATE_10)
+
+def test_t_q1_state_11():
+    '''
+    Test the T operator acting on qubit 1 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(1, T())
+    
+    npt.assert_allclose(circuit.state, np.exp(1j * np.pi / 4) * STATE_11)
+
+def test_t_q2_state_00():
+    '''
+    Test the T operator acting on qubit 2 of state |00>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(2, T())
+    
+    npt.assert_array_equal(circuit.state, STATE_00)
+
+def test_t_q2_state_01():
+    '''
+    Test the T operator acting on qubit 2 of state |01>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_01
+    circuit.apply_gate(2, T())
+    
+    npt.assert_allclose(circuit.state, np.exp(1j * np.pi / 4) * STATE_01)
+
+def test_t_q2_state_10():
+    '''
+    Test the T operator acting on qubit 2 of state |10>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_10
+    circuit.apply_gate(2, T())
+    
+    npt.assert_array_equal(circuit.state, STATE_10)
+
+def test_t_q2_state_11():
+    '''
+    Test the T operator acting on qubit 2 of state |11>.
+    '''
+    circuit = QuantumCircuit()
+    circuit.state = STATE_11
+    circuit.apply_gate(2, T())
+    
+    npt.assert_allclose(circuit.state, np.exp(1j * np.pi / 4) * STATE_11)
 
 ###########################
 # CONTROLLED GATES
