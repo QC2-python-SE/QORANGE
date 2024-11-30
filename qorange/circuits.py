@@ -20,6 +20,9 @@ class QuantumCircuit:
         """
         self.state = np.kron(np.array([1, 0]), np.array([1, 0]))
         self.density_matrix = np.outer(self.state, self.state.conj())
+
+        self.renduced_matrix_q1 = None
+        self.reduced_matrix_q2 = None
         self._gates = []  # Stores the gates applied to the circuit
 
     def update_state(self, new_state):
@@ -68,20 +71,39 @@ class QuantumCircuit:
             raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
         
 
-    def partial_trace(self, qubits_to_keep):
+    def partial_trace(self, dims= [2, 2], keep=None):
+        """
+        Calculate the partial trace of a density matrix.
         
+        Parameters:
+            rho (np.ndarray): Density matrix of the composite system.
+            dims (list or tuple): Dimensions of the subsystems [dim1, dim2].
         
-        reshaped_state = self.density_matrix.reshape(2, 2, 2, 2)
-        if qubits_to_keep == 1:
-            # perform trace over quabit 2
-            reduccude_matrix_q1 = np.einsum('ijkl->jk', reshaped_state)
-        elif qubits_to_keep == 2:
-            # perform trace over qubit 1
-            reduced_matrix_q2 = np.einsum('ijkl->il', reshaped_state)
-        else:
-            raise Exception("Invalid qubit index")
-            
+        Returns:
+            np.ndarray, np.ndarray: Reduced density matrices for the first and second qubits.
+        """
+        dim1, dim2 = dims
+        rho = self.density_matrix
+        rho_reshaped = rho.reshape(dim1, dim2, dim1, dim2) # Reshape the density matrix (axis 0 and 1 are for qubit 1, and axis 2 and 3 are for qubit 2)
+        
 
+        if keep ==1:
+            # Compute reduced density matrix for qubit 1
+            rho_1 = np.sum(rho_reshaped, axis=(1, 3)) # Sum over qubit 2
+            rho_1 /= np.trace(rho_1) # Normalize the reduced density matrix
+            return rho_1
+        
+        elif keep ==2:
+            # Compute reduced density matrix for qubit 2
+            rho_2 = np.sum(rho_reshaped, axis=(0, 2)) # Sum over qubit 1
+            rho_2 /= np.trace(rho_2) # Normalize the reduced density matrix
+            return rho_2
+
+        else: 
+            raise Exception("Invalid value for keep parameter. Use 1 to keep qubit 1, and 2 to keep qubit 2")
+
+        
+        
         
         
 
