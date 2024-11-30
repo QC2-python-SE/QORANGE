@@ -24,7 +24,7 @@ def test_circuit_1():
     circuit.apply_gate(1, PauliX())  # Apply X gate to the first qubit
     circuit.apply_gate(1, SWAP())  # Apply SWAP gate between qubits 1 and 2
 
-    # Expected state: |01> -> [0, 1, 0, 0]
+
     expected_state = np.array([0, 1, 0, 0])
 
     # Verify the output state matches the expected state
@@ -44,7 +44,7 @@ def test_circuit_2():
     circuit.apply_gate(1, PauliX())   # Apply X gate to the first qubit
     circuit.apply_gate(1, Hadamard())  # Apply Hadamard again to the first qubit
 
-    # Expected state: |00> -> [1, 0, 0, 0]
+    
     expected_state = np.array([1, 0, 0, 0])
 
     # Verify the output state matches the expected state
@@ -64,7 +64,7 @@ def test_circuit_3():
     circuit.apply_gate(1, Hadamard())  # Apply Hadamard to the first qubit
     circuit.apply_gate(1, CNOT())  # Apply CNOT with qubit 1 as control, qubit 2 as target
 
-    # Expected state: (|00> - |11>)/sqrt(2) -> [1/sqrt(2), 0, 0, -1/sqrt(2)]
+    
     expected_state = np.array([1/np.sqrt(2), 0, 0, -1/np.sqrt(2)])
 
     # Verify the output state matches the expected state
@@ -83,7 +83,7 @@ def test_circuit_4():
     circuit.apply_gate(1, PauliY())  # Apply Y gate to the first qubit
     circuit.apply_gate(1, SWAP())  # Apply SWAP gate between qubits 1 and 2
 
-    # Expected state: [0, 0, i, 0]
+    
     expected_state = np.array([0, 1j, 0, 0])
 
     npt.assert_allclose(
@@ -100,7 +100,7 @@ def test_circuit_5():
     circuit.apply_gate(1, PauliZ())   # Apply Z gate to the first qubit
     circuit.apply_gate(1, Hadamard())  # Apply Hadamard again to the first qubit
 
-    # Expected state: |10> -> [0, 1, 0, 0]
+    
     expected_state = np.array([0, 0, 1, 0])
 
     npt.assert_allclose(
@@ -110,7 +110,7 @@ def test_circuit_5():
 
 def test_circuit_6():
     '''
-    Test the Bell circuit for creating entanglement.
+    Test the circuit with Hadamard on the first qubit and CZ gate.
     '''
     circuit = QuantumCircuit()
     circuit.apply_gate(1, Hadamard())
@@ -119,4 +119,23 @@ def test_circuit_6():
     npt.assert_allclose(
         circuit.state, 
         np.array([1, 0, 1, 0])/np.sqrt(2)
+    )
+
+def test_circuit_7():
+    '''
+    Test the circuit with X, S on first qubit and SWAP gate.
+    '''
+    circuit = QuantumCircuit()
+    circuit.apply_gate(1, PauliX())  # Apply X gate to the first qubit
+    circuit.apply_gate(1, S())      # Apply S gate (phase gate) to the first qubit
+    circuit.apply_gate(1, SWAP())  # Apply SWAP gate between qubits 1 and 2
+
+    
+    expected_state = np.array([0, 1j, 0, 0])
+
+    npt.assert_allclose(
+        circuit.state,
+        expected_state,
+        rtol=1e-5,
+        atol=1e-8
     )
