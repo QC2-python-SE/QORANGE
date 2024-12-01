@@ -13,16 +13,8 @@ if __name__ == "__main__":
     cnot = CNOT()
 
     circuit = QuantumCircuit()
-    print(circuit.state)
-    circuit.apply_gate(1, h)
-    print(circuit.state)
-    circuit.apply_gate(1, cnot)
-    print(circuit.state)
 
-
-    print("-------------------")
-
-    swap_test = QuantumCircuit()
-    swap_test.apply_gate(1, x)
-    swap_test.apply_gate(1, swap)
-    print(swap_test.state)
+    circuit.apply_gate(h, 1)
+    circuit.apply_gate(swap)
+    circuit.draw()
+    
