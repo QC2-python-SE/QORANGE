@@ -44,19 +44,18 @@ class QuantumCircuit:
             gate: gate being applied
         """
         if isinstance(gate, Gate):
-            gate_info = { "gate": gate, "target": q_index }
+            gate_info = { "gate": gate, "control": None}
             if isinstance(gate, TwoQubitGate):
                 # q_index is not necessary here.
                 gate_matrix = gate.matrix
-                gate_info["control"] = 1 if q_index == 2 else 2
+                gate_info["target"] = 1
             else:
                 if isinstance(q_index, int):
+                    gate_info["target"] = q_index
                     if q_index == 1:
                         gate_matrix = np.kron(gate.matrix, np.eye(2))
-                        gate_info["control"] = None
                     elif q_index == 2:
                         gate_matrix = np.kron(np.eye(2),gate.matrix)
-                        gate_info["control"] = None
                     else:
                         raise Exception("Invalid indexing of qubits")
                 else:
@@ -80,8 +79,8 @@ class QuantumCircuit:
                 self.update_state(np.matmul(gate_matrix, self.state))
                 self.gate_history.append({
                   "gate": gate,
-                  "target": 1 if q_index == 2 else 2,
-                  "control": q_index,
+                  "target": q_index[1],
+                  "control": q_index[0],
                 })
             else:
                 raise Exception("Invalid q-index data type for controlled gates, use tuple")

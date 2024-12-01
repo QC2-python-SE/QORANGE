@@ -433,7 +433,96 @@ class T(Gate):
         ]
 
 
-class ControlledGate:
+class PhaseGate(Gate):
+    """
+    Represents the phase gate
+    """
+    def __init__(self, phi):
+        """
+        Initializes the phase gate with its matrix representation.
+        """
+        Gate.__init__(self, np.array([[1, 0],
+                                           [0, np.exp(1j*phi)]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ P │───",
+            "   └───┘   ",
+        ]
+
+
+class RotationXGate(Gate):
+    """
+    Represents the phase gate
+    """
+    def __init__(self, theta):
+        """
+        Initializes the phase gate with its matrix representation.
+        """
+        Gate.__init__(self, np.array([[np.cos(theta/2), -1j*np.sin(theta/2)],
+                                           [-1j*np.sin(theta/2), np.cos(theta/2)]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "  ┌────┐  ",
+            "──│ RX │──",
+            "  └────┘  ",
+        ]
+    
+
+class RotationYGate(Gate):
+    """
+    Represents the phase gate
+    """
+    def __init__(self, theta):
+        """
+        Initializes the phase gate with its matrix representation.
+        """
+        Gate.__init__(self, np.array([[np.cos(theta/2), -np.sin(theta/2)],
+                                           [np.sin(theta/2), np.cos(theta/2)]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "  ┌────┐  ",
+            "──│ RY │──",
+            "  └────┘  ",
+        ]
+    
+class RotationZGate(Gate):
+    """
+    Represents the phase gate
+    """
+    def __init__(self, theta):
+        """
+        Initializes the phase gate with its matrix representation.
+        """
+        Gate.__init__(self, np.array([[np.exp(-1j*theta/2),0],
+                                           [0, np.exp(1j*theta/2)]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "  ┌────┐  ",
+            "──│ RZ │──",
+            "  └────┘  ",
+        ]
+
+class ArbSingleQubitGate(Gate):
+
+    def __init__(self, matrix):
+        """
+        Initializes the abitrary single qubit gate with its matrix representation.
+        """
+        Gate.__init__(self, matrix)
+
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ A │───",
+            "   └───┘   ",
+        ]
+
+class ControlledGate():
     """
     Represents a controlled quantum gate.
 
@@ -448,7 +537,6 @@ class ControlledGate:
         __init__(gate): Initializes the controlled gate with the specified quantum gate.
         get_matrix(): Returns the matrix representation of the controlled quantum gate.
     """
-
     def __init__(self, gate):
         """
         Initializes the controlled quantum gate.
@@ -634,6 +722,35 @@ class CZ(ControlledGate):
                     "           ",
                 ]
 
+class ArbControlledGate(ControlledGate):
+    """
+    Represents the Controlled-Z (CZ) gate.
+    It applies a Z gate to the target qubit if the control qubit is \|1⟩.
+    """
+    def __init__(self, gate):
+        super().__init__(gate)
+
+    def draw(self, qubit_number, is_target=False):
+        if is_target:
+            return [
+                "   ┌───┐   ",
+                "───│ A │───",
+                "   └───┘   ",
+            ]
+        else:
+            if qubit_number == 1:
+                return [
+                    "           ",
+                    "─────●─────",
+                    "     │     ",
+                ]
+            else:
+                return [
+                    "     │     ",
+                    "─────●─────",
+                    "           ",
+                ]
+
 
 class TwoQubitGate(Gate):
     """
@@ -744,4 +861,13 @@ class SWAP(TwoQubitGate):
                 "─────✕─────",
                 "           ",
             ]
+
+
+class ArbTwoQubitGate(TwoQubitGate):
+
+    def __init__(self, matrix):
+        """
+        Initializes the abitrary single qubit gate with its matrix representation.
+        """
+        Gate.__init__(self, matrix)
 
