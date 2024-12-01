@@ -1,6 +1,3 @@
-import os, sys
-sys.path.insert(0, os.path.abspath('../../qorange'))
-
 # Configuration file for the Sphinx documentation builder.
 #
 # For the full list of built-in configuration values, see the documentation:
@@ -8,11 +5,13 @@ sys.path.insert(0, os.path.abspath('../../qorange'))
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = 'QORANGE'
-copyright = '2024, Srinjoy, Vamsi, Mate and Cathy'
-author = 'Srinjoy, Vamsi, Mate and Cathy'
-release = '0.1.0'
+import sys
+import os
+sys.path.insert(0, os.path.abspath('../../../qorange'))
+project = 'qorange'
+copyright = '2024, qorange'
+author = 'qorange'
+release = '0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -20,7 +19,7 @@ release = '0.1.0'
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = []
 
 
 
