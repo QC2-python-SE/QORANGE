@@ -6,7 +6,7 @@ class Gate:
     of the gate is unitary.
 
     Attributes:
-        _matrix (numpy.ndarray): The unitary matrix representing the quantum gate.
+        matrix (numpy.ndarray): The unitary matrix representing the quantum gate.
 
     Methods:
         __init__(matrix): Initializes the gate with the given unitary matrix.
@@ -36,7 +36,7 @@ class Gate:
         """
         Returns a string representation of the Gate object.
         """
-        return f"Gate({self._matrix})"
+        return f"Gate({self.matrix})"
 
 class Identity(Gate):
     """
@@ -48,6 +48,13 @@ class Identity(Gate):
         """
         Gate.__init__(self, np.array([[1, 0], 
                                            [0, 1]]))
+        
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ I │───",
+            "   └───┘   ",
+        ]
 
 class PauliX(Gate):
     """
@@ -60,6 +67,13 @@ class PauliX(Gate):
         """
         Gate.__init__(self, np.array([[0, 1], 
                                            [1, 0]]))
+        
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ X │───",
+            "   └───┘   ",
+        ]
 
 class PauliY(Gate):
     """
@@ -72,6 +86,13 @@ class PauliY(Gate):
         """
         Gate.__init__(self, np.array([[0, -1j], 
                                            [1j, 0]]))
+        
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ Y │───",
+            "   └───┘   ",
+        ]
 
 class PauliZ(Gate):
     """
@@ -84,6 +105,13 @@ class PauliZ(Gate):
         """
         Gate.__init__(self, np.array([[1, 0], 
                                            [0, -1]]))  # Corrected the second element
+        
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ Z │───",
+            "   └───┘   ",
+        ]
 
 class Hadamard(Gate):
     """
@@ -97,6 +125,13 @@ class Hadamard(Gate):
         """
         Gate.__init__(self, np.array([[1, 1], 
                                            [1, -1]])/np.sqrt(2))
+        
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ H │───",
+            "   └───┘   ",
+        ]
 
 class S(Gate):
     """
@@ -109,6 +144,13 @@ class S(Gate):
         """
         Gate.__init__(self, np.array([[1, 0], 
                                            [0, 1j]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ S │───",
+            "   └───┘   ",
+        ]
 
 class T(Gate):
     """
@@ -121,6 +163,13 @@ class T(Gate):
         """
         Gate.__init__(self, np.array([[1, 0],
                                            [0, 1/np.sqrt(2) + 1j/np.sqrt(2)]]))
+    
+    def draw(self, *args, **kwargs):
+        return [
+            "   ┌───┐   ",
+            "───│ T │───",
+            "   └───┘   ",
+        ]
 
 class ControlledGate():
     def __init__(self, gate):
@@ -140,6 +189,21 @@ class CNOT(ControlledGate):
     def __init__(self):
         super().__init__(PauliX())
 
+    def draw(self, qubit_number, is_target=False):
+        symbol = "○" if is_target else "●"
+        if qubit_number == 1:
+            return [
+                "           ",
+                f"─────{symbol}─────",
+                "     │     ",
+            ]
+        else:
+            return [
+                "     │     ",
+                f"─────{symbol}─────",
+                "           ",
+            ]
+
 class CZ(ControlledGate):
     """
     Represents the Controlled-Z (CZ) gate.
@@ -147,6 +211,27 @@ class CZ(ControlledGate):
     """
     def __init__(self):
         super().__init__(PauliZ())
+
+    def draw(self, qubit_number, is_target=False):
+        if is_target:
+            return [
+                "   ┌───┐   ",
+                "───│ Z │───",
+                "   └───┘   ",
+            ]
+        else:
+            if qubit_number == 1:
+                return [
+                    "           ",
+                    "─────●─────",
+                    "     │     ",
+                ]
+            else:
+                return [
+                    "     │     ",
+                    "─────●─────",
+                    "           ",
+                ]
 
 
 class TwoQubitGate(Gate):
@@ -168,3 +253,17 @@ class SWAP(TwoQubitGate):
             [0, 1, 0, 0],  # |10⟩ → |01⟩
             [0, 0, 0, 1]   # |11⟩ → |11⟩
         ]))
+
+    def draw(self, qubit_number, **kwargs):
+        if qubit_number == 1:
+            return [
+                "           ",
+                "─────✕─────",
+                "     │     ",
+            ]
+        else:
+            return [
+                "     │     ",
+                "─────✕─────",
+                "           ",
+            ]
