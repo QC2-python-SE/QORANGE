@@ -943,8 +943,91 @@ class CZ(ControlledGate):
                 ]
 
 
+class CPhase(ControlledGate):
+    """
+    Represents the Controlled-Phase (CPhase) gate.
+
+    The Controlled-Phase gate applies a phase shift of \\( \\phi \\) to the target qubit
+    when the control qubit is in the \\( \\vert 1 \\rangle \\) state. It is an extension
+    of the PhaseGate to two-qubit systems.
+
+    Attributes:
+        gate (PhaseGate): The phase gate applied as the controlled operation.
+
+    Methods:
+        __init__(phi): Initializes the CPhase gate with a given phase shift \\( \\phi \\).
+        draw(qubit_number, is_target=False): Returns the ASCII representation of the CPhase gate.
+    """
+
+    def __init__(self, phi):
+        """
+        Initializes the Controlled-Phase (CPhase) gate.
+
+        This constructor creates a ControlledGate with a PhaseGate as the target gate.
+
+        Args:
+            phi (float): The phase shift in radians.
+
+        Example:
+            To create a Controlled-Phase gate with a phase shift of \\( \\pi/2 \\):
+
+            .. code-block:: python
+
+                cphase_gate = CPhase(np.pi / 2)
+        """
+        super().__init__(PhaseGate(phi))
+
+    def draw(self, qubit_number, is_target=False):
+        """
+        Returns the ASCII representation of the Controlled-Phase (CPhase) gate.
+
+        The CPhase gate uses a dot (●) to represent the control qubit and a "P" symbol
+        for the target qubit to indicate the phase shift.
+
+        Args:
+            qubit_number (int): The qubit's position in the circuit (1 for control, 2 for target).
+            is_target (bool, optional): Whether the qubit is the target qubit. Defaults to False.
+
+        Returns:
+            list: A list of strings representing the ASCII art for the CPhase gate.
+
+        Example:
+            Control qubit (●):
+            .. code-block:: text
+
+                 │     
+            ─────●─────
+
+            Target qubit (P):
+            .. code-block:: text
+
+               ┌───┐   
+            ───│ P │───
+               └───┘   
+        """
+        if is_target:
+            return [
+                "   ┌───┐   ",
+                "───│ P │───",
+                "   └───┘   ",
+            ]
+        else:
+            if qubit_number == 1:
+                return [
+                    "           ",
+                    "─────●─────",
+                    "     │     ",
+                ]
+            else:
+                return [
+                    "     │     ",
+                    "─────●─────",
+                    "           ",
+                ]
+
+
 class ArbControlledGate(ControlledGate):
-    
+
     def __init__(self, gate):
         super().__init__(gate)
 
