@@ -48,3 +48,22 @@ The program is organized using an Object-Oriented Programming (OOP) approach. Th
 
 --- 
 
+# Distribution
+
+To build the `qorange` package, run the following from the terminal:
+
+```
+python setup.py sdist bdist_wheel
+```
+
+You can then install `qorange` locally as follows:
+
+```
+ pip install . 
+```
+
+To install dependencies from requirements.txt, do:
+
+```
+pip install -r requirements.txt
+```
