@@ -35,7 +35,7 @@ class QuantumCircuit:
         self.state = new_state
         self.density_matrix = np.outer(self.state, self.state.conj())
 
-    def apply_gate(self, q_index, gate):
+    def apply_gate(self, gate, q_index = None):
         """
         Applies a gate matrix to the circuit's state vector.
 
@@ -48,25 +48,31 @@ class QuantumCircuit:
                 # q_index is not necessary here.
                 gate_matrix = gate.matrix
             else:
-                if q_index == 1:
-                    gate_matrix = np.kron(gate.matrix, np.eye(2))
-                elif q_index == 2:
-                    gate_matrix = np.kron(np.eye(2),gate.matrix)
+                if isinstance(q_index, int):
+                    if q_index == 1:
+                        gate_matrix = np.kron(gate.matrix, np.eye(2))
+                    elif q_index == 2:
+                        gate_matrix = np.kron(np.eye(2),gate.matrix)
+                    else:
+                        raise Exception("Invalid indexing of qubits")
                 else:
-                    raise Exception("Invalid indexing of qubits")
+                    raise Exception("Invalid q-index data type for single qubit gate, use int")
             self.update_state(np.matmul(gate_matrix, self.state))
 
         elif isinstance(gate, ControlledGate):
-            if q_index == 1:
-                # control is on the first qubit
-                gate_matrix = np.kron(np.array([[1,0],[0,0]]), np.eye(2)) + np.kron(np.array([[0,0],[0,1]]), gate.get_matrix())
-            elif q_index == 2:
-                # control is on the second qubit
-                gate_matrix = np.kron(np.eye(2), np.array([[1,0],[0,0]])) + np.kron(gate.get_matrix(), np.array([[0,0],[0,1]]))
+            if isinstance(q_index, tuple):
+                if q_index == (1,2):
+                    # control is on the first qubit
+                    gate_matrix = np.kron(np.array([[1,0],[0,0]]), np.eye(2)) + np.kron(np.array([[0,0],[0,1]]), gate.get_matrix())
+                elif q_index == (2,1):
+                    # control is on the second qubit
+                    gate_matrix = np.kron(np.eye(2), np.array([[1,0],[0,0]])) + np.kron(gate.get_matrix(), np.array([[0,0],[0,1]]))
+                else:
+                    raise Exception("Invalid indexing of qubits")
+                
+                self.update_state(np.matmul(gate_matrix, self.state))
             else:
-                raise Exception("Invalid indexing of qubits")
-            
-            self.update_state(np.matmul(gate_matrix, self.state))
+                raise Exception("Invalid q-index data type for controlled gates, use tuple")
         else:
             raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
         
