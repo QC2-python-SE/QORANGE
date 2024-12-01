@@ -210,8 +210,8 @@ class QuantumCircuit:
             .. code-block:: text
 
                 Qubit 1: ───H───●────
-                           │
-                Qubit 2: ────────X────
+                                │
+                Qubit 2: ───────X────
 
         Details:
             - Single-qubit gates are represented with their symbols (e.g., H, X, RZ).
