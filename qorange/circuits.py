@@ -131,14 +131,14 @@ class QuantumCircuit:
 
         if keep == 1:
             # Compute reduced density matrix for qubit 1
-            rho_1 = np.sum(rho_reshaped, axis=(1, 3))  # Sum over qubit 2
-            rho_1 /= np.trace(rho_1)  # Normalize the reduced density matrix
+            rho_1 = np.trace(rho_reshaped, axis1=1, axis2=3)  # Sum over qubit 2
+            #rho_1 /= np.trace(rho_1)  # Normalize the reduced density matrix
             return rho_1
 
         elif keep == 2:
             # Compute reduced density matrix for qubit 2
-            rho_2 = np.sum(rho_reshaped, axis=(0, 2))  # Sum over qubit 1
-            rho_2 /= np.trace(rho_2)  # Normalize the reduced density matrix
+            rho_2 = np.trace(rho_reshaped, axis1=0, axis2=2)  # Sum over qubit 1
+            #rho_2 /= np.trace(rho_2)  # Normalize the reduced density matrix
             return rho_2
 
         else:
