@@ -7,7 +7,7 @@ class QuantumCircuit:
 
     Attributes:
         num_qubits (int): The number of qubits in the circuit.
-        gates (list): A list of gates applied to the circuit, stored as tuples (gate_name, target_qubits, parameters).
+        gate_history (list): A list of gates applied to the circuit, stored as tuples (gate_name, target_qubits, parameters).
         state (np.ndarray): A numpy array representing the state vector of the circuit.
     """
 
@@ -20,10 +20,10 @@ class QuantumCircuit:
         """
         self.state = np.kron(np.array([1, 0]), np.array([1, 0]))
         self.density_matrix = np.outer(self.state, self.state.conj())
-
         self.renduced_matrix_q1 = None
         self.reduced_matrix_q2 = None
         self._gates = []  # Stores the gates applied to the circuit
+        self.gate_history = []  # Stores the gates applied to the circuit
 
     def update_state(self, new_state):
         """
@@ -44,20 +44,26 @@ class QuantumCircuit:
             gate: gate being applied
         """
         if isinstance(gate, Gate):
+            gate_info = { "gate": gate, "target": q_index }
             if isinstance(gate, TwoQubitGate):
                 # q_index is not necessary here.
                 gate_matrix = gate.matrix
+                gate_info["control"] = 1 if q_index == 2 else 2
             else:
                 if isinstance(q_index, int):
                     if q_index == 1:
                         gate_matrix = np.kron(gate.matrix, np.eye(2))
+                        gate_info["control"] = None
                     elif q_index == 2:
                         gate_matrix = np.kron(np.eye(2),gate.matrix)
+                        gate_info["control"] = None
                     else:
                         raise Exception("Invalid indexing of qubits")
                 else:
                     raise Exception("Invalid q-index data type for single qubit gate, use int")
+
             self.update_state(np.matmul(gate_matrix, self.state))
+            self.gate_history.append(gate_info)
 
         elif isinstance(gate, ControlledGate):
             if isinstance(q_index, tuple):
@@ -69,10 +75,17 @@ class QuantumCircuit:
                     gate_matrix = np.kron(np.eye(2), np.array([[1,0],[0,0]])) + np.kron(gate.get_matrix(), np.array([[0,0],[0,1]]))
                 else:
                     raise Exception("Invalid indexing of qubits")
+                    
                 
                 self.update_state(np.matmul(gate_matrix, self.state))
+                self.gate_history.append({
+                  "gate": gate,
+                  "target": 1 if q_index == 2 else 2,
+                  "control": q_index,
+                })
             else:
                 raise Exception("Invalid q-index data type for controlled gates, use tuple")
+
         else:
             raise Exception("Specified gate is invalid, use Gate or ControlledGate class")
         
@@ -141,5 +154,57 @@ class QuantumCircuit:
         
 
 
-          
-    
+     
+    def draw(self):
+        """
+        Draws a circuit diagram using ASCII characters.
+        """
+        EMPTY_SEGMENT = [
+            "           ",
+            "───────────",
+            "           ",
+        ]
+
+        diagram = [
+            [], # Qubit 1 line
+            [], # Qubit 2 line
+        ]
+
+        for gate_info in self.gate_history:
+            control_qubit = gate_info["control"]
+            target_qubit = gate_info["target"]
+
+            if control_qubit:
+                num_gates_control = len(diagram[control_qubit - 1])
+                num_gates_target = len(diagram[target_qubit - 1])
+                if (num_gates_control > num_gates_target):
+                    # Add some padding to the target line to make sure everything aligns
+                    diagram[target_qubit - 1].extend(
+                        [EMPTY_SEGMENT for i in range(num_gates_control - num_gates_target)]
+                    )
+                elif (num_gates_control < num_gates_target): 
+                    # Add some padding to the control line to make sure everything aligns
+                    diagram[control_qubit - 1].extend(
+                        [EMPTY_SEGMENT for i in range(num_gates_target - num_gates_control)]
+                    )
+                diagram[control_qubit - 1].append(
+                    gate_info["gate"].draw(control_qubit, is_target=False)
+                )
+
+            diagram[target_qubit - 1].append(
+                gate_info["gate"].draw(target_qubit, is_target=True)
+            )
+
+        if len(diagram[0]) < len(diagram[1]):
+            # Pad the end of qubit line 1 to match the length of qubit line 2
+            diagram[0].extend([EMPTY_SEGMENT for i in range(len(diagram[1]) - len(diagram[0]))])
+        elif len(diagram[0]) > len(diagram[1]):
+            # Pad the end of qubit line 2 to match the length of qubit line 1
+            diagram[1].extend([EMPTY_SEGMENT for i in range(len(diagram[0]) - len(diagram[1]))])
+
+        for qubit_line_n in range(2):
+            for printed_line_m in range(3):
+                line = "".join([
+                    printed_lines[printed_line_m] for printed_lines in diagram[qubit_line_n]
+                ])
+                print(line)
