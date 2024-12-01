@@ -59,7 +59,7 @@ class Identity(Gate):
 class PauliX(Gate):
     """
     Represents the Pauli-X quantum gate, also known as the NOT gate.
-    It flips the state of a qubit (|0⟩ ↔ |1⟩).
+    It flips the state of a qubit (\|0⟩ ↔ \|1⟩).
     """
     def __init__(self):
         """
@@ -116,8 +116,8 @@ class PauliZ(Gate):
 class Hadamard(Gate):
     """
     Represents the Hadamard quantum gate (H).
-    It creates superpositions by transforming |0⟩ to (|0⟩ + |1⟩)/√2 
-    and |1⟩ to (|0⟩ - |1⟩)/√2.
+    It creates superpositions by transforming \|0⟩ to (\|0⟩ + \|1⟩)/√2 
+    and \|1⟩ to (\|0⟩ - \|1⟩)/√2.
     """
     def __init__(self):
         """
@@ -136,7 +136,7 @@ class Hadamard(Gate):
 class S(Gate):
     """
     Represents the S gate (phase gate).
-    It applies a 90° phase shift to the |1⟩ state.
+    It applies a 90° phase shift to the \|1⟩ state.
     """
     def __init__(self):
         """
@@ -155,7 +155,7 @@ class S(Gate):
 class T(Gate):
     """
     Represents the T gate (π/8 gate).
-    It applies a π/4 phase shift to the |1⟩ state.
+    It applies a π/4 phase shift to the \|1⟩ state.
     """
     def __init__(self):
         """
@@ -184,7 +184,7 @@ class ControlledGate():
 class CNOT(ControlledGate):
     """
     Represents the Controlled-NOT (CNOT) gate.
-    It flips the target qubit if the control qubit is |1⟩.
+    It flips the target qubit if the control qubit is \|1⟩.
     """
     def __init__(self):
         super().__init__(PauliX())
@@ -207,7 +207,7 @@ class CNOT(ControlledGate):
 class CZ(ControlledGate):
     """
     Represents the Controlled-Z (CZ) gate.
-    It applies a Z gate to the target qubit if the control qubit is |1⟩.
+    It applies a Z gate to the target qubit if the control qubit is \|1⟩.
     """
     def __init__(self):
         super().__init__(PauliZ())
