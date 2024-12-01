@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Gate:
     """
     A base class for quantum gates, ensuring that the matrix representation
@@ -34,8 +35,9 @@ class Gate:
         if not isinstance(matrix, np.ndarray):
             raise TypeError("Matrix must be a numpy array.")
         if np.shape(matrix) != (span, span):
-            raise ValueError(f"Matrix must be square with dimensions ({span}, {span}).")
-        
+            raise ValueError(
+                f"Matrix must be square with dimensions ({span}, {span}).")
+
         # Check unitarity: U†U = I
         if not np.allclose(np.eye(matrix.shape[0]), np.dot(matrix, matrix.conj().T)):
             raise ValueError("Matrix is not unitary!")
@@ -58,7 +60,7 @@ class Identity(Gate):
     Represents the Identity quantum gate (I), which leaves the quantum state unchanged.
 
     The Identity gate has the matrix representation:
-    
+
     .. math::
         I = \\begin{bmatrix}
             1 & 0 \\\\
@@ -81,17 +83,17 @@ class Identity(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0],
                                       [0, 1]]))
-        
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the Identity gate.
 
         Example:
             Drawing the Identity gate:
-            
-            
+
+
        .. code-block:: text
 
                    ┌───┐   
@@ -104,6 +106,7 @@ class Identity(Gate):
             "   └───┘   ",
         ]
 
+
 class PauliX(Gate):
     """
     Represents the Pauli-X quantum gate, also known as the NOT gate.
@@ -114,7 +117,7 @@ class PauliX(Gate):
         \\vert 0\\rangle \\leftrightarrow \\vert 1\\rangle
 
     The Pauli-X gate has the matrix representation:
-    
+
     .. math::
         X = \\begin{bmatrix}
             0 & 1 \\\\
@@ -137,16 +140,16 @@ class PauliX(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[0, 1], 
+        Gate.__init__(self, np.array([[0, 1],
                                       [1, 0]]))
-        
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the Pauli-X gate.
 
         Example:
             Drawing the Pauli-X gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -167,7 +170,7 @@ class PauliY(Gate):
     The Pauli-Y gate applies a 180° rotation around the Y-axis on the Bloch sphere.
 
     The Pauli-Y gate has the matrix representation:
-    
+
     .. math::
         Y = \\begin{bmatrix}
             0 & -i \\\\
@@ -190,16 +193,16 @@ class PauliY(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[0, -1j], 
+        Gate.__init__(self, np.array([[0, -1j],
                                       [1j, 0]]))
-        
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the Pauli-Y gate.
 
         Example:
             Drawing the Pauli-Y gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -212,6 +215,7 @@ class PauliY(Gate):
             "   └───┘   ",
         ]
 
+
 class PauliZ(Gate):
     """
     Represents the Pauli-Z quantum gate.
@@ -219,7 +223,7 @@ class PauliZ(Gate):
     The Pauli-Z gate applies a 180° rotation around the Z-axis on the Bloch sphere.
 
     The Pauli-Z gate has the matrix representation:
-    
+
     .. math::
         Z = \\begin{bmatrix}
             1 & 0 \\\\
@@ -242,16 +246,16 @@ class PauliZ(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0],
                                       [0, -1]]))
-        
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the Pauli-Z gate.
 
         Example:
             Drawing the Pauli-Z gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -276,7 +280,7 @@ class Hadamard(Gate):
         \\vert 1\\rangle \\to \\frac{\\vert 0\\rangle - \\vert 1\\rangle}{\\sqrt{2}}
 
     The Hadamard gate has the matrix representation:
-    
+
     .. math::
         H = \\frac{1}{\\sqrt{2}} \\begin{bmatrix}
             1 & 1 \\\\
@@ -299,16 +303,16 @@ class Hadamard(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[1, 1], 
+        Gate.__init__(self, np.array([[1, 1],
                                       [1, -1]]) / np.sqrt(2))
-        
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the Hadamard gate.
 
         Example:
             Drawing the Hadamard gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -329,7 +333,7 @@ class S(Gate):
     The S gate applies a 90° phase shift to the \\vert 1\\rangle state.
 
     The S gate has the matrix representation:
-    
+
     .. math::
         S = \\begin{bmatrix}
             1 & 0 \\\\
@@ -352,16 +356,16 @@ class S(Gate):
         Inherits from:
             Gate: A base class for quantum gates.
         """
-        Gate.__init__(self, np.array([[1, 0], 
+        Gate.__init__(self, np.array([[1, 0],
                                       [0, 1j]]))
-    
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the S gate.
 
         Example:
             Drawing the S gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -382,7 +386,7 @@ class T(Gate):
     The T gate applies a π/4 phase shift to the \\vert 1\\rangle state.
 
     The T gate has the matrix representation:
-    
+
     .. math::
         T = \\begin{bmatrix}
             1 & 0 \\\\
@@ -412,14 +416,14 @@ class T(Gate):
         """
         Gate.__init__(self, np.array([[1, 0],
                                       [0, 1/np.sqrt(2) + 1j/np.sqrt(2)]]))
-    
+
     def draw(self, *args, **kwargs):
         """
         Returns the ASCII representation of the T gate.
 
         Example:
             Drawing the T gate:
-            
+
             .. code-block:: text
 
                    ┌───┐   
@@ -435,16 +439,60 @@ class T(Gate):
 
 class PhaseGate(Gate):
     """
-    Represents the phase gate
+    Represents the phase gate.
+
+    The phase gate is a single-qubit gate that applies a phase shift of \\( \\phi \\)
+    to the \\( \\vert 1 \\rangle \\) state while leaving the \\( \\vert 0 \\rangle \\)
+    state unchanged. It is commonly used for phase adjustments in quantum circuits.
+
+    The matrix representation of the phase gate is:
+
+    .. math::
+        P(\\phi) = \\begin{bmatrix}
+            1 & 0 \\\\
+            0 & e^{i\\phi}
+        \\end{bmatrix}
     """
+
     def __init__(self, phi):
         """
-        Initializes the phase gate with its matrix representation.
+        Initializes the phase gate.
+
+        This constructor sets up the matrix representation of the phase gate for a
+        given phase shift \\( \\phi \\):
+
+        .. math::
+            P(\\phi) = \\begin{bmatrix}
+                1 & 0 \\\\
+                0 & e^{i\\phi}
+            \\end{bmatrix}
+
+        Args:
+            phi (float): The phase shift in radians.
         """
-        Gate.__init__(self, np.array([[1, 0],
-                                           [0, np.exp(1j*phi)]]))
-    
+        Gate.__init__(self, np.array([
+            [1, 0],
+            [0, np.exp(1j * phi)]
+        ]))
+
     def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the phase gate.
+
+        Example:
+            .. code-block:: text
+
+                   ┌───┐
+                ───│ P │───
+                   └───┘
+
+        Args:
+            *args: Additional positional arguments (not used).
+            **kwargs: Additional keyword arguments (not used).
+
+        Returns:
+            list: A list of strings representing the ASCII art of the phase gate.
+        """
         return [
             "   ┌───┐   ",
             "───│ P │───",
@@ -454,73 +502,241 @@ class PhaseGate(Gate):
 
 class RotationXGate(Gate):
     """
-    Represents the phase gate
+    Represents the Rotation-X (RX) gate.
+
+    The RX gate is a single-qubit gate that applies a rotation around the X-axis of the Bloch sphere
+    by an angle \\( \\theta \\). It is commonly used for implementing arbitrary single-qubit rotations.
+
+    The matrix representation of the RX gate is:
+
+    .. math::
+        RX(\\theta) = \\begin{bmatrix}
+            \\cos(\\theta / 2) & -i \\sin(\\theta / 2) \\\\
+            -i \\sin(\\theta / 2) & \\cos(\\theta / 2)
+        \\end{bmatrix}
     """
+
     def __init__(self, theta):
         """
-        Initializes the phase gate with its matrix representation.
+        Initializes the RX gate.
+
+        This constructor sets up the matrix representation of the RX gate for a given angle \\( \\theta \\):
+
+        .. math::
+            RX(\\theta) = \\begin{bmatrix}
+                \\cos(\\theta / 2) & -i \\sin(\\theta / 2) \\\\
+                -i \\sin(\\theta / 2) & \\cos(\\theta / 2)
+            \\end{bmatrix}
+
+        Args:
+            theta (float): The rotation angle in radians.
         """
-        Gate.__init__(self, np.array([[np.cos(theta/2), -1j*np.sin(theta/2)],
-                                           [-1j*np.sin(theta/2), np.cos(theta/2)]]))
-    
+        Gate.__init__(self, np.array([
+            [np.cos(theta / 2), -1j * np.sin(theta / 2)],
+            [-1j * np.sin(theta / 2), np.cos(theta / 2)]
+        ]))
+
     def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the RX gate.
+
+        Example:
+            .. code-block:: text
+
+                   ┌────┐
+                 ──│ RX │──
+                   └────┘
+
+        Args:
+            *args: Additional positional arguments (not used).
+            **kwargs: Additional keyword arguments (not used).
+
+        Returns:
+            list: A list of strings representing the ASCII art of the RX gate.
+        """
         return [
             "  ┌────┐  ",
             "──│ RX │──",
             "  └────┘  ",
         ]
-    
+
 
 class RotationYGate(Gate):
     """
-    Represents the phase gate
+    Represents the Rotation-Y (RY) gate.
+
+    The RY gate is a single-qubit gate that applies a rotation around the Y-axis of the Bloch sphere
+    by an angle \\( \\theta \\). It is commonly used for implementing arbitrary single-qubit rotations.
+
+    The matrix representation of the RY gate is:
+
+    .. math::
+        RY(\\theta) = \\begin{bmatrix}
+            \\cos(\\theta / 2) & -\\sin(\\theta / 2) \\\\
+            \\sin(\\theta / 2) & \\cos(\\theta / 2)
+        \\end{bmatrix}
     """
+
     def __init__(self, theta):
         """
-        Initializes the phase gate with its matrix representation.
+        Initializes the RY gate.
+
+        This constructor sets up the matrix representation of the RY gate for a given angle \\( \\theta \\):
+
+        .. math::
+            RY(\\theta) = \\begin{bmatrix}
+                \\cos(\\theta / 2) & -\\sin(\\theta / 2) \\\\
+                \\sin(\\theta / 2) & \\cos(\\theta / 2)
+            \\end{bmatrix}
+
+        Args:
+            theta (float): The rotation angle in radians.
         """
-        Gate.__init__(self, np.array([[np.cos(theta/2), -np.sin(theta/2)],
-                                           [np.sin(theta/2), np.cos(theta/2)]]))
-    
+        Gate.__init__(self, np.array([
+            [np.cos(theta / 2), -np.sin(theta / 2)],
+            [np.sin(theta / 2), np.cos(theta / 2)]
+        ]))
+
     def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the RY gate.
+
+        Example:
+            .. code-block:: text
+
+                   ┌────┐
+                 ──│ RY │──
+                   └────┘
+
+        Args:
+            *args: Additional positional arguments (not used).
+            **kwargs: Additional keyword arguments (not used).
+
+        Returns:
+            list: A list of strings representing the ASCII art of the RY gate.
+        """
         return [
             "  ┌────┐  ",
             "──│ RY │──",
             "  └────┘  ",
         ]
-    
+
+
 class RotationZGate(Gate):
     """
-    Represents the phase gate
+    Represents the Rotation-Z (RZ) gate.
+
+    The RZ gate is a single-qubit gate that applies a rotation around the Z-axis of the Bloch sphere
+    by an angle \\( \\theta \\). It is commonly used for phase adjustments and is a key component
+    in building universal quantum gates.
+
+    The matrix representation of the RZ gate is:
+
+    .. math::
+        RZ(\\theta) = \\begin{bmatrix}
+            e^{-i\\theta / 2} & 0 \\\\
+            0 & e^{i\\theta / 2}
+        \\end{bmatrix}
     """
+
     def __init__(self, theta):
         """
-        Initializes the phase gate with its matrix representation.
+        Initializes the RZ gate.
+
+        This constructor sets up the matrix representation of the RZ gate for a given angle \\( \\theta \\):
+
+        .. math::
+            RZ(\\theta) = \\begin{bmatrix}
+                e^{-i\\theta / 2} & 0 \\\\
+                0 & e^{i\\theta / 2}
+            \\end{bmatrix}
+
+        Args:
+            theta (float): The rotation angle in radians.
         """
-        Gate.__init__(self, np.array([[np.exp(-1j*theta/2),0],
-                                           [0, np.exp(1j*theta/2)]]))
-    
+        Gate.__init__(self, np.array([
+            [np.exp(-1j * theta / 2), 0],
+            [0, np.exp(1j * theta / 2)]
+        ]))
+
     def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the RZ gate.
+
+        Example:
+            .. code-block:: text
+
+                   ┌────┐
+                 ──│ RZ │──
+                   └────┘
+
+        Args:
+            *args: Additional positional arguments (not used).
+            **kwargs: Additional keyword arguments (not used).
+
+        Returns:
+            list: A list of strings representing the ASCII art of the RZ gate.
+        """
         return [
             "  ┌────┐  ",
             "──│ RZ │──",
             "  └────┘  ",
         ]
 
+
 class ArbSingleQubitGate(Gate):
+    """
+    Represents an arbitrary single-qubit quantum gate.
+
+    The `ArbSingleQubitGate` class allows for the creation of single-qubit gates with
+    user-defined unitary matrix representations. This provides flexibility for custom
+    quantum gate designs.
+
+    Attributes:
+        matrix (numpy.ndarray): The unitary matrix representing the arbitrary single-qubit gate.
+
+    Methods:
+        __init__(matrix): Initializes the gate with the provided matrix representation.
+        draw(*args, **kwargs): Returns the ASCII representation of the gate.
+    """
 
     def __init__(self, matrix):
         """
-        Initializes the abitrary single qubit gate with its matrix representation.
+        Initializes the arbitrary single-qubit gate.
+
+        Args:
+            matrix (numpy.ndarray): A 2x2 unitary matrix representing the single-qubit gate.
+
+        Raises:
+            TypeError: If the provided matrix is not a numpy array.
+            ValueError: If the matrix is not 2x2 or not unitary.
         """
-        Gate.__init__(self, matrix)
+        super().__init__(matrix)
 
     def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the arbitrary single-qubit gate.
+
+        Example:
+            .. code-block:: text
+
+                   ┌───┐
+                ───│ U │───
+                   └───┘
+
+        Args:
+            *args: Additional positional arguments (not used).
+            **kwargs: Additional keyword arguments (not used).
+
+        Returns:
+            list: A list of strings representing the ASCII art of the gate.
+        """
         return [
             "   ┌───┐   ",
-            "───│ A │───",
+            "───│ U │───",
             "   └───┘   ",
         ]
+
 
 class ControlledGate():
     """
@@ -537,6 +753,7 @@ class ControlledGate():
         __init__(gate): Initializes the controlled gate with the specified quantum gate.
         get_matrix(): Returns the matrix representation of the controlled quantum gate.
     """
+
     def __init__(self, gate):
         """
         Initializes the controlled quantum gate.
@@ -550,7 +767,8 @@ class ControlledGate():
         if isinstance(gate, Gate):
             self.gate = gate
         else:
-            raise TypeError("Specified gate object is invalid. It must be an instance of the Gate class.")
+            raise TypeError(
+                "Specified gate object is invalid. It must be an instance of the Gate class.")
 
     def get_matrix(self):
         """
@@ -564,6 +782,7 @@ class ControlledGate():
         """
         # Expand the gate to include control logic (this implementation is minimal for now).
         return self.gate.matrix
+
 
 class CNOT(ControlledGate):
     """
@@ -612,8 +831,8 @@ class CNOT(ControlledGate):
 
         Returns:
             list: A list of strings representing the ASCII art for the CNOT gate.
-        
-       
+
+
         Control qubit (●):
             .. code-block:: text
 
@@ -639,6 +858,7 @@ class CNOT(ControlledGate):
                 f"─────{symbol}─────",
                 "           ",
             ]
+
 
 class CZ(ControlledGate):
     """
@@ -698,9 +918,9 @@ class CZ(ControlledGate):
         Target qubit (Z):
             .. code-block:: text
 
-               ┌───┐   
-            ───│ Z │───
-               └───┘   
+                       ┌───┐   
+                    ───│ Z │───
+                       └───┘   
         """
         if is_target:
             return [
@@ -722,11 +942,13 @@ class CZ(ControlledGate):
                     "           ",
                 ]
 
+
 class ArbControlledGate(ControlledGate):
     """
     Represents the Controlled-Z (CZ) gate.
     It applies a Z gate to the target qubit if the control qubit is \|1⟩.
     """
+
     def __init__(self, gate):
         super().__init__(gate)
 
@@ -864,10 +1086,31 @@ class SWAP(TwoQubitGate):
 
 
 class ArbTwoQubitGate(TwoQubitGate):
+    """
+    Represents an arbitrary two-qubit quantum gate.
+
+    The `ArbTwoQubitGate` class allows for the creation of two-qubit gates with
+    user-defined unitary matrix representations. This provides flexibility for
+    designing custom two-qubit quantum gates.
+
+    Attributes:
+        matrix (numpy.ndarray): The 4x4 unitary matrix representing the two-qubit gate.
+
+    Methods:
+        __init__(matrix): Initializes the gate with the provided matrix representation.
+    """
 
     def __init__(self, matrix):
         """
-        Initializes the abitrary single qubit gate with its matrix representation.
-        """
-        Gate.__init__(self, matrix)
+        Initializes the arbitrary two-qubit gate.
 
+        Ensures that the provided matrix is 4x4 and unitary.
+
+        Args:
+            matrix (numpy.ndarray): A 4x4 unitary matrix representing the two-qubit gate.
+
+        Raises:
+            TypeError: If the provided matrix is not a numpy array.
+            ValueError: If the matrix is not 4x4 or not unitary.
+        """
+        super().__init__(matrix)
