@@ -48,7 +48,7 @@ class QuantumCircuit:
             if isinstance(gate, TwoQubitGate):
                 # q_index is not necessary here.
                 gate_matrix = gate.matrix
-                gate_info["target"] = 1
+                gate_info["target"] = None
             else:
                 if isinstance(q_index, int):
                     gate_info["target"] = q_index
@@ -150,9 +150,6 @@ class QuantumCircuit:
         
         else:
             raise Exception("Invalid value for qubit_to_measure parameter. Use 1 for qubit 1 and 2 for qubit 2")
-        
-
-
      
     def draw(self):
         """
@@ -172,6 +169,13 @@ class QuantumCircuit:
         for gate_info in self.gate_history:
             control_qubit = gate_info["control"]
             target_qubit = gate_info["target"]
+
+            if not target_qubit:
+                # If there's no target qubit then apply the gate to both qubits.
+                # Easiest way to do this is to arbitrarily assign the qubits as control and target. 
+                # It's not pretty but it works :')
+                control_qubit = 1
+                target_qubit = 2
 
             if control_qubit:
                 num_gates_control = len(diagram[control_qubit - 1])
