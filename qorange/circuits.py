@@ -134,7 +134,7 @@ class QuantumCircuit:
         if qubit_to_measure == 1:
             rho_1 = self.partial_trace(keep=1)
             p0 = np.trace(rho_1 @ np.array([1, 0], 
-                                          [0, 1])) # Probability of measuring 0 p_0 = Tr(|0><0| * rho)
+                                          [0, 0])) # Probability of measuring 0 p_0 = Tr(|0><0| * rho)
             p1 = np.trace(rho_1 @ np.array([0, 0],
                                            [0, 1])) # Probability of measuring 1 p_1 = Tr(|1><1| * rho)
             outcome= np.array([p0, p1])
@@ -143,7 +143,7 @@ class QuantumCircuit:
         elif qubit_to_measure == 2:
             rho_2 = self.partial_trace(keep=2)
             p0 = np.trace(rho_2 @ np.array([1, 0], 
-                                          [0, 1]))
+                                          [0, 0]))
             p1 = np.trace(rho_2 @ np.array([0, 0],
                                            [0, 1]))
             outcome= np.array([p0, p1])
