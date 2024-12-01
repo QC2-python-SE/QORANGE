@@ -723,10 +723,7 @@ class CZ(ControlledGate):
                 ]
 
 class ArbControlledGate(ControlledGate):
-    """
-    Represents the Controlled-Z (CZ) gate.
-    It applies a Z gate to the target qubit if the control qubit is \|1⟩.
-    """
+    
     def __init__(self, gate):
         super().__init__(gate)
 
