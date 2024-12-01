@@ -15,6 +15,9 @@ if __name__ == "__main__":
     circuit = QuantumCircuit()
 
     circuit.apply_gate(h, 1)
-    circuit.apply_gate(swap)
+    circuit.apply_gate(cnot, (1,2))
+    
+    circuit.apply_gate(cnot, (2,1))
+    circuit.apply_gate(CZ(), (2,1))
     circuit.draw()
     
