@@ -47,6 +47,17 @@ The program is organized using an Object-Oriented Programming (OOP) approach. Th
 3. **Gate Class**: Represents various quantum gates, including unitary transformations and standard gate operations.
 
 --- 
+# Generating Documentation
+
+To generate the documentation for the `qorange` package, run the following from the terminal:
+NOTE: Ensure you are in the `QORANGE` main folder. You may be required to run `conda install nbsphinx`.
+```
+sphinx-apidoc -o docs/source/ orange
+cd docs
+make clean
+make html
+```
+Pre-generated documentation can be found in `QORANGE\docs\build`
 
 # Distribution
 
