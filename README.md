@@ -52,7 +52,7 @@ The program is organized using an Object-Oriented Programming (OOP) approach. Th
 To generate the documentation for the `qorange` package, run the following from the terminal:
 NOTE: Ensure you are in the `QORANGE` main folder. You may be required to run `conda install nbsphinx`.
 ```
-sphinx-apidoc -o docs/source/ orange
+sphinx-apidoc -o docs/source/ qorange
 cd docs
 make clean
 make html
