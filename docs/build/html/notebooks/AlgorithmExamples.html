@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quantum Algorithm Examples &mdash; qorange 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=2709fde1"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Drawing a circuit" href="CircuitDrawing.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            qorange
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">qorange</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CircuitDrawing.html">Drawing a circuit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quantum Algorithm Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Entanglement-Circuit">Entanglement Circuit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Step-by-Step-Explanation">Step-by-Step Explanation</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Hadamard-Test">Hadamard Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#2-Qubit-Quantum-Fourier-Transform">2-Qubit Quantum Fourier Transform</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Explanation-of-the-QFT-Implementation">Explanation of the QFT Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Key-Details-of-a-2-Qubit-QFT">Key Details of a 2-Qubit QFT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Example-Output-for-Basis-States">Example Output for Basis States</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Deutsch-Josza">Deutsch Josza</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Rabi-Oscillations">Rabi Oscillations</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">qorange</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Quantum Algorithm Examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/AlgorithmExamples.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="s1">&#39;../../../../qorange&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<section id="Quantum-Algorithm-Examples">
+<h1>Quantum Algorithm Examples<a class="headerlink" href="#Quantum-Algorithm-Examples" title="Link to this heading"></a></h1>
+<section id="Entanglement-Circuit">
+<h2>Entanglement Circuit<a class="headerlink" href="#Entanglement-Circuit" title="Link to this heading"></a></h2>
+<p>This Python code creates a simple quantum circuit designed to generate an <strong>entangled state</strong> using the <code class="docutils literal notranslate"><span class="pre">qorange</span></code> library. Here’s a breakdown of what each part of the code does:</p>
+<section id="Step-by-Step-Explanation">
+<h3>Step-by-Step Explanation<a class="headerlink" href="#Step-by-Step-Explanation" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Initialise qubits in <span class="math notranslate nohighlight">\(|00\rangle\)</span> state</p></li>
+<li><p>Apply the Hadamard gate to the forst qubit which trasforms the state of the system inot <span class="math notranslate nohighlight">\(| + \rangle | 0\rangle\)</span></p></li>
+<li><p>Apply a CNOT to entangle the two qubit lines which results in the state <span class="math notranslate nohighlight">\((|00 \rangle + |11\rangle)/\sqrt{2}\)</span></p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qorange.circuits</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qorange.gates</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">Hadamard</span><span class="p">()</span>
+<span class="n">CNOT</span> <span class="o">=</span> <span class="n">CNOT</span><span class="p">()</span>
+
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">CNOT</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+   ┌───┐
+───│ H │────────●─────
+   └───┘        │
+                │
+────────────────○─────
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;State Vector:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Density Matrix:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">density_matrix</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+State Vector:
+[0.70710678 0.         0.         0.70710678]
+Density Matrix:
+[[0.5 0.  0.  0.5]
+ [0.  0.  0.  0. ]
+ [0.  0.  0.  0. ]
+ [0.5 0.  0.  0.5]]
+</pre></div></div>
+</div>
+<p>The resulting state is a Bell state. The two qubits are perfecly coreleted if we measure, we measure the same outcome on both qubits.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reduced Density Matrix on Qubit 1:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">partial_trace</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reduced Density Matrix on Qubit 2:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">circuit</span><span class="o">.</span><span class="n">partial_trace</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Reduced Density Matrix on Qubit 1:
+[[0.5 0. ]
+ [0.  0.5]]
+Reduced Density Matrix on Qubit 2:
+[[0.5 0. ]
+ [0.  0.5]]
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Measure Qubit 1:&quot;</span><span class="p">)</span>
+<span class="n">m1</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability of being in state |0&gt;: </span><span class="si">{</span><span class="n">m1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability of being in state |1&gt;: </span><span class="si">{</span><span class="n">m1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Measure Qubit 2:&quot;</span><span class="p">)</span>
+<span class="n">m2</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability of being in state |0&gt;: </span><span class="si">{</span><span class="n">m2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Probability of being in state |1&gt;: </span><span class="si">{</span><span class="n">m2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Measure Qubit 1:
+Probability of being in state |0&gt;: 0.4999999999999999
+Probability of being in state |1&gt;: 0.4999999999999999
+Measure Qubit 2:
+Probability of being in state |0&gt;: 0.4999999999999999
+Probability of being in state |1&gt;: 0.4999999999999999
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="Hadamard-Test">
+<h2>Hadamard Test<a class="headerlink" href="#Hadamard-Test" title="Link to this heading"></a></h2>
+</section>
+<section id="2-Qubit-Quantum-Fourier-Transform">
+<h2>2-Qubit Quantum Fourier Transform<a class="headerlink" href="#2-Qubit-Quantum-Fourier-Transform" title="Link to this heading"></a></h2>
+<section id="Explanation-of-the-QFT-Implementation">
+<h3>Explanation of the QFT Implementation<a class="headerlink" href="#Explanation-of-the-QFT-Implementation" title="Link to this heading"></a></h3>
+<p>This Jupyter Notebook implements the <strong>Quantum Fourier Transform (QFT)</strong> on a 2-qubit system using the QOrange quantum computing library. The code defines circuits that perform the QFT on each of the four computational basis states: (<a href="#id1"><span class="problematic" id="id2">|</span></a>00:nbsphinx-math:<cite>rangle</cite>), (<a href="#id3"><span class="problematic" id="id4">|</span></a>01:nbsphinx-math:<cite>rangle</cite>), (<a href="#id5"><span class="problematic" id="id6">|</span></a>10:nbsphinx-math:<cite>rangle</cite>), and (<a href="#id7"><span class="problematic" id="id8">|</span></a>11:nbsphinx-math:<cite>rangle</cite>). Here’s the breakdown:</p>
+<ol class="arabic simple">
+<li><p><strong>Helper Function</strong>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">clean_complex_array</span></code> is a utility to remove small floating-point noise from the resulting complex amplitudes, ensuring that the printed outputs are clean and human-readable.</p></li>
+</ul>
+</li>
+<li><p><strong>Gate Definitions</strong>:</p>
+<ul class="simple">
+<li><p><strong>Hadamard Gate (H)</strong>: Creates superpositions.</p></li>
+<li><p><strong>Controlled-Phase Gate (CP)</strong>: Introduces relative phases based on the Fourier coefficients.</p></li>
+<li><p><strong>SWAP Gate</strong>: Reverses qubit order, as required in the QFT algorithm.</p></li>
+</ul>
+</li>
+<li><p><strong>Circuit Construction</strong>:</p>
+<ul class="simple">
+<li><p>Each circuit starts with a specific computational basis state.</p></li>
+<li><p>Gates are applied in sequence to perform the QFT:</p>
+<ol class="arabic simple">
+<li><p><strong>Hadamard Gate</strong> on the first qubit to create a superposition.</p></li>
+<li><p><strong>Controlled Phase Gate</strong> to introduce relative phases.</p></li>
+<li><p><strong>Hadamard Gate</strong> on the second qubit.</p></li>
+<li><p><strong>SWAP Gate</strong> to reverse the order of the qubits.</p></li>
+</ol>
+</li>
+</ul>
+</li>
+<li><p><strong>Output States</strong>:</p>
+<ul class="simple">
+<li><p>The final amplitudes represent the Fourier-transformed states corresponding to the input computational basis states.</p></li>
+</ul>
+</li>
+<li><p><strong>Results</strong>:</p>
+<ul class="simple">
+<li><p>Outputs for each computational basis input are printed as cleaned complex arrays, showcasing the Fourier transform’s effect.</p></li>
+</ul>
+</li>
+</ol>
+<p>This approach illustrates how the QFT algorithm transforms the states in a step-by-step manner using quantum gates.</p>
+</section>
+<section id="Key-Details-of-a-2-Qubit-QFT">
+<h3>Key Details of a 2-Qubit QFT<a class="headerlink" href="#Key-Details-of-a-2-Qubit-QFT" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p><strong>Input State</strong>: Suppose the input state is a general 2-qubit state:</p>
+<p>$$</p>
+<p>|:nbsphinx-math:<cite>psi</cite><span class="math">\rangle `= c_0|00:nbsphinx-math:</span>rangle <cite>+ c_1|01:nbsphinx-math:</cite>rangle <cite>+ c_2|10:nbsphinx-math:</cite>rangle <cite>+ c_3|11:nbsphinx-math:</cite>rangle`</p>
+<p>$$</p>
+</li>
+<li><p><strong>QFT Transformation</strong>: The QFT maps the input state to:</p>
+<p>$$</p>
+<p><span class="math">\text{QFT}`(\|:nbsphinx-math:</span>psi`:nbsphinx-math:<cite>rangle</cite>) = <span class="math">\frac{1}{2}</span> <span class="math">\sum</span><em>{k=0}^{3} :nbsphinx-math:`sum`</em>{j=0}^{3} c_j e^{2:nbsphinx-math:<cite>pi `i j k / 4} |k:nbsphinx-math:</cite>rangle`</p>
+<p>$$</p>
+<p>where $ j, k <span class="math">\in `{0, 1, 2, 3} $, and $ \|k:nbsphinx-math:</span>rangle <a href="#id9"><span class="problematic" id="id10">`</span></a>$ are the computational basis states.</p>
+</li>
+<li><p><strong>Matrix Representation</strong>: The QFT for 2 qubits can be represented as a ( 4 <span class="math">\times 4</span> ) unitary matrix:</p>
+<p>$$</p>
+<p>U_{<span class="math">\text{QFT}</span>} = <span class="math">\frac{1}{2}</span></p>
+<p>$$</p>
+<p>This matrix acts on the 4-dimensional vector <span class="math notranslate nohighlight">\([c_0, c_1, c_2, c_3]^T\)</span>.</p>
+</li>
+</ol>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">qorange.circuits</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qorange.gates</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<span class="k">def</span> <span class="nf">clean_complex_array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-10</span><span class="p">):</span>  <span class="c1"># THIS IS A HELPER FUNCTION TO CLEAN THE OUTPUT OF FLOATING POINT NOISE *(DOES NOT AFFECT THE CIRCUIT, JUST MAKES PRINT OUT NICER)*</span>
+    <span class="k">def</span> <span class="nf">clean_complex_number</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+        <span class="n">real</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">real</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">real</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">imag</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">imag</span> <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">tolerance</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">complex</span><span class="p">(</span><span class="n">real</span><span class="p">,</span> <span class="n">imag</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">clean_complex_number</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">arr</span><span class="p">])</span>
+
+<span class="c1"># Create a quantum circuit for each possible state of two qubits</span>
+<span class="n">circuit00</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span> <span class="c1"># |00&gt;</span>
+<span class="n">circuit01</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span> <span class="c1"># |01&gt;</span>
+<span class="n">circuit10</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span> <span class="c1"># |10&gt;</span>
+<span class="n">circuit11</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span> <span class="c1"># |11&gt;</span>
+
+<span class="c1"># define the gates we use in the circuits</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">PauliX</span><span class="p">()</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">Hadamard</span><span class="p">()</span>
+<span class="n">cp</span> <span class="o">=</span> <span class="n">CPhase</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">swap</span> <span class="o">=</span> <span class="n">SWAP</span><span class="p">()</span>
+
+<span class="c1"># when the input is |00&gt; = [1, 0, 0, 0] (in computational basis)</span>
+<span class="n">circuit00</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit00</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit00</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit00</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">swap</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean_complex_array</span><span class="p">(</span><span class="n">circuit00</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+
+
+<span class="c1">#when the input is |01&gt; = [0, 1, 0, 0] (in computational basis)</span>
+<span class="n">circuit01</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit01</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit01</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit01</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit01</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">swap</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean_complex_array</span><span class="p">(</span><span class="n">circuit01</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+
+
+<span class="c1">#when the input is |10&gt; = [0, 0, 1, 0] (in computational basis)</span>
+<span class="n">circuit10</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit10</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit10</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit10</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit10</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">swap</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean_complex_array</span><span class="p">(</span><span class="n">circuit10</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+
+<span class="c1">#when the input is |11&gt; = [0, 0, 0, 1] (in computational basis)</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit11</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">swap</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">clean_complex_array</span><span class="p">(</span><span class="n">circuit11</span><span class="o">.</span><span class="n">state</span><span class="p">))</span>
+<br/><br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+[0.5+0.j 0.5+0.j 0.5+0.j 0.5+0.j]
+[ 0.5+0.j   0. +0.5j -0.5+0.j   0. -0.5j]
+[ 0.5+0.j -0.5+0.j  0.5+0.j -0.5+0.j]
+[ 0.5+0.j   0. -0.5j -0.5+0.j   0. +0.5j]
+</pre></div></div>
+</div>
+</section>
+<section id="Example-Output-for-Basis-States">
+<h3>Example Output for Basis States<a class="headerlink" href="#Example-Output-for-Basis-States" title="Link to this heading"></a></h3>
+<ul>
+<li><p><strong>Input State</strong> $|00:nbsphinx-math:<a href="#id11"><span class="problematic" id="id12">`</span></a>rangle <a href="#id13"><span class="problematic" id="id14">`</span></a>$:</p>
+<p>$$</p>
+<p><span class="math">\text{QFT}`(|00:nbsphinx-math:</span>rangle`) = <span class="math">\frac{1}{2}`(|00:nbsphinx-math:</span>rangle <cite>+ |01:nbsphinx-math:</cite>rangle <cite>+ |10:nbsphinx-math:</cite>rangle <cite>+ |11:nbsphinx-math:</cite>rangle`)</p>
+<p>$$</p>
+</li>
+<li><p><strong>Input State</strong> $ |01:nbsphinx-math:<a href="#id15"><span class="problematic" id="id16">`</span></a>rangle <a href="#id17"><span class="problematic" id="id18">`</span></a>$:</p>
+<p>$$</p>
+<p><span class="math">\text{QFT}`(|01:nbsphinx-math:</span>rangle`) = <span class="math">\frac{1}{2}`(|00:nbsphinx-math:</span>rangle <cite>+ i|01:nbsphinx-math:</cite>rangle <cite>- |10:nbsphinx-math:</cite>rangle <cite>- i|11:nbsphinx-math:</cite>rangle`)</p>
+<p>$$</p>
+</li>
+<li><p><strong>Input State</strong> $ |10:nbsphinx-math:<a href="#id19"><span class="problematic" id="id20">`</span></a>rangle <a href="#id21"><span class="problematic" id="id22">`</span></a>$:</p>
+<p>$$</p>
+<p><span class="math">\text{QFT}`(|10:nbsphinx-math:</span>rangle`) = <span class="math">\frac{1}{2}`(|00:nbsphinx-math:</span>rangle <cite>- |01:nbsphinx-math:</cite>rangle <cite>+ |10:nbsphinx-math:</cite>rangle <cite>- |11:nbsphinx-math:</cite>rangle`)</p>
+<p>$$</p>
+</li>
+<li><p><strong>Input State</strong> $ |11:nbsphinx-math:<a href="#id23"><span class="problematic" id="id24">`</span></a>rangle <a href="#id25"><span class="problematic" id="id26">`</span></a>$:</p>
+<p>$$</p>
+<p><span class="math">\text{QFT}`(|11:nbsphinx-math:</span>rangle`) = <span class="math">\frac{1}{2}`(|00:nbsphinx-math:</span>rangle <cite>- i|01:nbsphinx-math:</cite>rangle <cite>- |10:nbsphinx-math:</cite>rangle <cite>+ i|11:nbsphinx-math:</cite>rangle`)</p>
+<p>$$</p>
+</li>
+</ul>
+</section>
+</section>
+<section id="Deutsch-Josza">
+<h2>Deutsch Josza<a class="headerlink" href="#Deutsch-Josza" title="Link to this heading"></a></h2>
+<p>The Deutsch Josza algorithm can be used to distinguish between constant zero and balanced function.</p>
+<p>Define an oracle <span class="math notranslate nohighlight">\(O_P\)</span> s.t. $O_P|x:nbsphinx-math:<cite>rangle `|y:nbsphinx-math:</cite>rangle <cite>= |x:nbsphinx-math:</cite>rangle <cite>|y :nbsphinx-math:</cite>oplus <cite>f(x) :nbsphinx-math:</cite>rangle <cite>= (-1)^{f(x)}|x:nbsphinx-math:</cite>rangle <cite>|y:nbsphinx-math:</cite>rangle <a href="#id27"><span class="problematic" id="id28">`</span></a>$</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qorange.circuits</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qorange.gates</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">Hadamard</span><span class="p">()</span>
+<span class="n">cnot</span> <span class="o">=</span> <span class="n">CNOT</span><span class="p">()</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">PauliX</span><span class="p">()</span>
+<span class="n">swap</span> <span class="o">=</span> <span class="n">SWAP</span><span class="p">()</span>
+
+<span class="c1">#Oracles (The matrix representation of the oracle depends on whether the function is balanced or constant)</span>
+<span class="n">oracle_matrix_constant_zero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="n">oracle_matrix_balanced</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="p">])</span>
+
+<span class="n">U_const</span> <span class="o">=</span> <span class="n">ArbTwoQubitGate</span><span class="p">(</span><span class="n">oracle_matrix_constant_zero</span><span class="p">)</span>
+<span class="n">U_balanced</span> <span class="o">=</span> <span class="n">ArbTwoQubitGate</span><span class="p">(</span><span class="n">oracle_matrix_balanced</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit_const</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span>
+<span class="n">circuit_const</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">circuit_const</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">circuit_const</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">circuit_const</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">U_const</span><span class="p">)</span>
+<span class="n">circuit_const</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">circuit_balanced</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span>
+<span class="n">circuit_balanced</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit_balanced</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit_balanced</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit_balanced</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">U_balanced</span><span class="p">)</span>
+<span class="n">circuit_balanced</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Below we can see that the measurement outcome on qubit 1 depends on whether the oracle used was of the balanced or constant zero function.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><br/><span></span><span class="n">circuit_const</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([1., 0.])
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">circuit_balanced</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([0., 1.])
+</pre></div></div>
+</div>
+</section>
+<section id="Rabi-Oscillations">
+<h2>Rabi Oscillations<a class="headerlink" href="#Rabi-Oscillations" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qorange.circuits</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qorange.gates</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">Hadamard</span><span class="p">()</span>
+<span class="n">CP</span> <span class="o">=</span> <span class="n">CPhase</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">CP</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">circuit</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+   ┌───┐                 ┌───┐
+───│ H │────────●────────│ H │───
+   └───┘        │        └───┘
+   ┌───┐      ┌───┐      ┌───┐
+───│ H │──────│ P │──────│ H │───
+   └───┘      └───┘      └───┘
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">qorange.circuits</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">qorange.gates</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">H</span> <span class="o">=</span> <span class="n">Hadamard</span><span class="p">()</span>
+
+
+
+<span class="n">phi_list</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">P0_q1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">P1_q1</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">P0_q2</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">P1_q2</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">phi</span> <span class="ow">in</span> <span class="n">phi_list</span><span class="p">:</span>
+    <span class="n">CP</span> <span class="o">=</span> <span class="n">CPhase</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span>
+    <span class="n">circuit</span> <span class="o">=</span> <span class="n">QuantumCircuit</span><span class="p">()</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">CP</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">circuit</span><span class="o">.</span><span class="n">apply_gate</span><span class="p">(</span><span class="n">H</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">P_q1</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">P0_q1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P_q1</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">P1_q1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P_q1</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">P_q2</span> <span class="o">=</span> <span class="n">circuit</span><span class="o">.</span><span class="n">measure_qubit_computational</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">P0_q2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P_q2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">P1_q2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">P_q2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Probability of Qubit 1 states&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi_list</span><span class="p">,</span> <span class="n">P0_q1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Probability of 0&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi_list</span><span class="p">,</span> <span class="n">P1_q1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Probability of 1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\phi$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Probability of Qubit 2 states&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi_list</span><span class="p">,</span> <span class="n">P0_q2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Probability of 0&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">phi_list</span><span class="p">,</span> <span class="n">P1_q2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;Probability of 1&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\phi$&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Probability&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_AlgorithmExamples_26_0.png" src="../_images/notebooks_AlgorithmExamples_26_0.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&lt;matplotlib.legend.Legend at 0x1cd177f7f10&gt;
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_AlgorithmExamples_26_2.png" src="../_images/notebooks_AlgorithmExamples_26_2.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CircuitDrawing.html" class="btn btn-neutral float-left" title="Drawing a circuit" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, qorange.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
