@@ -738,6 +738,32 @@ class ArbSingleQubitGate(Gate):
         ]
 
 
+class MeasurementGate(Gate):
+    """
+    Represents the Measurement gate (M). This gate is only used for circuit drawing.
+    """
+
+    def __init__(self):
+        """
+        Initializes the Measurement gate.
+
+        Inherits from:
+            Gate: A base class for quantum gates.
+        """
+        Gate.__init__(self, np.array([[1, 0],
+                                      [0, 1]])) # Initialise to any matrix: we're not using this
+
+    def draw(self, *args, **kwargs):
+        """
+        Returns the ASCII representation of the Measurement gate.
+        """
+        return [
+            "   ┌───┐   ",
+            "───│ M │───",
+            "   └───┘   ",
+        ]
+
+
 class ControlledGate():
     """
     Represents a controlled quantum gate.
