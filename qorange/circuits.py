@@ -1,5 +1,5 @@
 import numpy as np
-from qorange.gates import Gate, TwoQubitGate, ControlledGate
+from qorange.gates import Gate, TwoQubitGate, ControlledGate, MeasurementGate
 
 
 class QuantumCircuit:
@@ -171,6 +171,11 @@ class QuantumCircuit:
                 probabilities = circuit.measure_qubit_computational(1)
                 print(probabilities)  # Output: [0.5, 0.5]
         """
+        gate_info = { 
+            "gate": MeasurementGate(), 
+            "target": qubit_to_measure,
+            "control": None,
+        }
 
         if qubit_to_measure == 1:
             rho_1 = self.partial_trace(keep=1)
@@ -179,6 +184,7 @@ class QuantumCircuit:
             p1 = np.trace(rho_1 @ np.array([[0, 0],
                                            [0, 1]]))  # Probability of measuring 1 p_1 = Tr(|1><1| * rho)
             outcome = np.array([p0, p1])
+            self.gate_history.append(gate_info)
             return np.real(outcome)
 
         elif qubit_to_measure == 2:
@@ -188,6 +194,7 @@ class QuantumCircuit:
             p1 = np.trace(rho_2 @ np.array([[0, 0],
                                            [0, 1]]))
             outcome = np.array([p0, p1])
+            self.gate_history.append(gate_info)
             return np.real(outcome)
 
         else:
