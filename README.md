@@ -57,7 +57,7 @@ cd docs
 make clean
 make html
 ```
-Pre-generated documentation can be found in `QORANGE\docs\build`
+Pre-generated documentation can be found in `QORANGE\docs\build\html`
 
 # Distribution
 
