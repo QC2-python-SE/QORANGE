@@ -1,6 +1,17 @@
 # QORANGE
 
 ![screenshot](qorange_logo.png)
+
+Latest version: https://pypi.org/project/qorange/
+
+## Installation
+
+To install the `qorange` package, run:
+
+```
+pip install qorange
+```
+
 # Quantum Circuit Design Notes
 
 ## Overview
@@ -61,20 +72,14 @@ Pre-generated documentation can be found in `QORANGE\docs\build\html`
 
 # Distribution
 
-To build the `qorange` package, run the following from the terminal:
+To create a new build, run:
 
 ```
-python setup.py sdist bdist_wheel
+python3 setup.py sdist bdist_wheel
 ```
 
-You can then install `qorange` locally as follows:
+Then to upload to PyPI, run the following. (You will need a PyPI account and an API key.)
 
 ```
- pip install . 
-```
-
-To install dependencies from requirements.txt, do:
-
-```
-pip install -r requirements.txt
+python3 -m twine upload dist/*
 ```
