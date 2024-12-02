@@ -1,6 +1,6 @@
 # QORANGE
 
-
+![screenshot](qorange_logo.png)
 # Quantum Circuit Design Notes
 
 ## Overview
